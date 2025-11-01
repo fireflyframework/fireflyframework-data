@@ -16,12 +16,15 @@
 
 package com.firefly.common.data.util;
 
-import brave.Tracing;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
-import io.micrometer.tracing.brave.bridge.BraveBaggageManager;
-import io.micrometer.tracing.brave.bridge.BraveCurrentTraceContext;
-import io.micrometer.tracing.brave.bridge.BraveTracer;
+import io.micrometer.tracing.Tracer;
+import io.micrometer.tracing.otel.bridge.*;
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
+import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,17 +34,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TracingContextExtractorTest {
 
     private ObservationRegistry observationRegistry;
-    private Tracing tracing;
-    private BraveTracer tracer;
+    private OpenTelemetry openTelemetry;
+    private Tracer tracer;
 
     @BeforeEach
     void setUp() {
-        // Set up Brave tracing
-        tracing = Tracing.newBuilder().build();
-        tracer = new BraveTracer(
-                tracing.tracer(),
-                new BraveCurrentTraceContext(tracing.currentTraceContext()),
-                new BraveBaggageManager()
+        // Set up OpenTelemetry tracing
+        SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder().build();
+        openTelemetry = OpenTelemetrySdk.builder()
+                .setTracerProvider(sdkTracerProvider)
+                .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
+                .build();
+
+        tracer = new OtelTracer(
+                openTelemetry.getTracer("test"),
+                new OtelCurrentTraceContext(),
+                event -> {}
         );
 
         // Set the tracer in the extractor
@@ -56,9 +64,7 @@ class TracingContextExtractorTest {
 
     @AfterEach
     void tearDown() {
-        if (tracing != null) {
-            tracing.close();
-        }
+        // OpenTelemetry SDK cleanup if needed
     }
 
     @Test
@@ -74,7 +80,7 @@ class TracingContextExtractorTest {
                 // Then: Trace ID should be extracted
                 assertThat(traceId).isNotNull();
                 assertThat(traceId).isNotEmpty();
-                assertThat(traceId).hasSize(16); // Brave trace IDs are 16 hex characters
+                assertThat(traceId).hasSize(32); // OpenTelemetry trace IDs are 32 hex characters
             });
         } finally {
             observation.stop();
@@ -94,7 +100,7 @@ class TracingContextExtractorTest {
                 // Then: Span ID should be extracted
                 assertThat(spanId).isNotNull();
                 assertThat(spanId).isNotEmpty();
-                assertThat(spanId).hasSize(16); // Brave span IDs are 16 hex characters
+                assertThat(spanId).hasSize(16); // OpenTelemetry span IDs are 16 hex characters
             });
         } finally {
             observation.stop();

@@ -16,7 +16,6 @@
 
 package com.firefly.common.data.util;
 
-import brave.propagation.TraceContext;
 import io.micrometer.observation.Observation;
 import io.micrometer.tracing.Tracer;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +26,7 @@ import java.util.Optional;
  * Utility class for extracting tracing context information from Micrometer Observation.
  *
  * This class provides methods to extract trace IDs and span IDs from the current
- * observation context, supporting both Brave and OpenTelemetry tracing backends.
+ * observation context, supporting OpenTelemetry tracing backend.
  */
 @Slf4j
 public final class TracingContextExtractor {
@@ -70,9 +69,7 @@ public final class TracingContextExtractor {
         }
 
         // Fallback to observation context
-        return extractGenericTraceId(observation)
-                .or(() -> extractBraveTraceId(observation))
-                .orElse(null);
+        return extractGenericTraceId(observation).orElse(null);
     }
 
     /**
@@ -96,9 +93,7 @@ public final class TracingContextExtractor {
         }
 
         // Fallback to observation context
-        return extractGenericSpanId(observation)
-                .or(() -> extractBraveSpanId(observation))
-                .orElse(null);
+        return extractGenericSpanId(observation).orElse(null);
     }
 
     /**
@@ -121,71 +116,7 @@ public final class TracingContextExtractor {
         return Optional.empty();
     }
 
-    /**
-     * Extracts trace ID from Brave tracing context.
-     */
-    private static Optional<String> extractBraveTraceId(Observation observation) {
-        try {
-            Observation.Context context = observation.getContext();
-            if (context == null) {
-                return Optional.empty();
-            }
 
-            // Try to get generic TraceContext from the observation context
-            io.micrometer.tracing.TraceContext traceContext = context.get(io.micrometer.tracing.TraceContext.class);
-            if (traceContext != null) {
-                String traceId = traceContext.traceId();
-                log.trace("Extracted trace ID from TraceContext: {}", traceId);
-                return Optional.ofNullable(traceId);
-            }
-
-            // Alternative: Try to get Brave TraceContext directly
-            TraceContext directContext = context.get(TraceContext.class);
-            if (directContext != null) {
-                String traceId = directContext.traceIdString();
-                log.trace("Extracted Brave trace ID (direct): {}", traceId);
-                return Optional.ofNullable(traceId);
-            }
-
-        } catch (Exception e) {
-            log.debug("Failed to extract Brave trace ID: {}", e.getMessage());
-        }
-
-        return Optional.empty();
-    }
-
-    /**
-     * Extracts span ID from Brave tracing context.
-     */
-    private static Optional<String> extractBraveSpanId(Observation observation) {
-        try {
-            Observation.Context context = observation.getContext();
-            if (context == null) {
-                return Optional.empty();
-            }
-
-            // Try to get generic TraceContext from the observation context
-            io.micrometer.tracing.TraceContext traceContext = context.get(io.micrometer.tracing.TraceContext.class);
-            if (traceContext != null) {
-                String spanId = traceContext.spanId();
-                log.trace("Extracted span ID from TraceContext: {}", spanId);
-                return Optional.ofNullable(spanId);
-            }
-
-            // Alternative: Try to get Brave TraceContext directly
-            TraceContext directContext = context.get(TraceContext.class);
-            if (directContext != null) {
-                String spanId = directContext.spanIdString();
-                log.trace("Extracted Brave span ID (direct): {}", spanId);
-                return Optional.ofNullable(spanId);
-            }
-
-        } catch (Exception e) {
-            log.debug("Failed to extract Brave span ID: {}", e.getMessage());
-        }
-
-        return Optional.empty();
-    }
 
     /**
      * Extracts trace ID using generic Micrometer Tracing API.
@@ -302,8 +233,7 @@ public final class TracingContextExtractor {
 
             // Fallback: check observation context
             Observation.Context context = observation.getContext();
-            return context.get(io.micrometer.tracing.TraceContext.class) != null
-                    || context.get(TraceContext.class) != null;
+            return context.get(io.micrometer.tracing.TraceContext.class) != null;
         } catch (Exception e) {
             log.debug("Error checking for tracing context: {}", e.getMessage());
             return false;
