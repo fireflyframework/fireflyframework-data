@@ -59,7 +59,7 @@ The data enrichment subsystem allows defining enricher operations as annotated b
 <dependency>
     <groupId>org.fireflyframework</groupId>
     <artifactId>fireflyframework-data</artifactId>
-    <version>26.02.03</version>
+    <version>26.02.04</version>
 </dependency>
 ```
 

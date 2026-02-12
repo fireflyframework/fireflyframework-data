@@ -39,7 +39,7 @@ class JobMetricsServiceTest {
         meterRegistry = new SimpleMeterRegistry();
         properties = new JobOrchestrationProperties();
         properties.getObservability().setMetricsEnabled(true);
-        properties.getObservability().setMetricPrefix("firefly.data.job");
+        properties.getObservability().setMetricPrefix("firefly.data");
         properties.setOrchestratorType("AWS_STEP_FUNCTIONS");
         
         metricsService = new JobMetricsService(meterRegistry, properties);
@@ -56,7 +56,7 @@ class JobMetricsServiceTest {
         metricsService.recordJobStageExecution(stage, status, duration);
         
         // Then
-        assertThat(meterRegistry.find("firefly.data.job.stage.execution")
+        assertThat(meterRegistry.find("firefly.data.stage.execution")
                 .tag("stage", "START")
                 .tag("status", "success")
                 .timer()).isNotNull();
@@ -73,12 +73,12 @@ class JobMetricsServiceTest {
         metricsService.incrementJobStageCounter(stage, status);
         
         // Then
-        assertThat(meterRegistry.find("firefly.data.job.stage.count")
+        assertThat(meterRegistry.find("firefly.data.stage.count")
                 .tag("stage", "CHECK")
                 .tag("status", "success")
                 .counter()).isNotNull();
         
-        assertThat(meterRegistry.find("firefly.data.job.stage.count")
+        assertThat(meterRegistry.find("firefly.data.stage.count")
                 .tag("stage", "CHECK")
                 .tag("status", "success")
                 .counter()
@@ -94,7 +94,7 @@ class JobMetricsServiceTest {
         metricsService.recordJobExecutionStart(executionId);
         
         // Then
-        assertThat(meterRegistry.find("firefly.data.job.execution.started")
+        assertThat(meterRegistry.find("firefly.data.execution.started")
                 .counter()).isNotNull();
     }
 
@@ -108,11 +108,11 @@ class JobMetricsServiceTest {
         metricsService.recordJobExecutionCompletion(executionId, JobExecutionStatus.SUCCEEDED);
         
         // Then
-        assertThat(meterRegistry.find("firefly.data.job.execution.duration")
+        assertThat(meterRegistry.find("firefly.data.execution.duration")
                 .tag("status", "SUCCEEDED")
                 .timer()).isNotNull();
         
-        assertThat(meterRegistry.find("firefly.data.job.execution.completed")
+        assertThat(meterRegistry.find("firefly.data.execution.completed")
                 .tag("status", "SUCCEEDED")
                 .counter()).isNotNull();
     }
@@ -127,7 +127,7 @@ class JobMetricsServiceTest {
         metricsService.recordJobError(stage, errorType);
         
         // Then
-        assertThat(meterRegistry.find("firefly.data.job.error")
+        assertThat(meterRegistry.find("firefly.data.error")
                 .tag("stage", "COLLECT")
                 .tag("error.type", "RuntimeException")
                 .counter()).isNotNull();
@@ -143,7 +143,7 @@ class JobMetricsServiceTest {
         metricsService.recordMapperExecution(mapperName, true, duration);
         
         // Then
-        assertThat(meterRegistry.find("firefly.data.job.mapper.execution")
+        assertThat(meterRegistry.find("firefly.data.mapper.execution")
                 .tag("mapper", "CustomerMapper")
                 .tag("status", "success")
                 .timer()).isNotNull();
@@ -159,7 +159,7 @@ class JobMetricsServiceTest {
         metricsService.recordOrchestratorOperation(operation, true, duration);
         
         // Then
-        assertThat(meterRegistry.find("firefly.data.job.orchestrator.operation")
+        assertThat(meterRegistry.find("firefly.data.orchestrator.operation")
                 .tag("operation", "startJob")
                 .tag("status", "success")
                 .timer()).isNotNull();
@@ -174,7 +174,7 @@ class JobMetricsServiceTest {
         metricsService.recordActiveJobCount(count);
         
         // Then
-        assertThat(meterRegistry.find("firefly.data.job.active.count")
+        assertThat(meterRegistry.find("firefly.data.active.count")
                 .gauge()).isNotNull();
     }
 
@@ -187,7 +187,7 @@ class JobMetricsServiceTest {
         metricsService.recordJobStageExecution(JobStage.START, "success", Duration.ofSeconds(1));
         
         // Then
-        assertThat(meterRegistry.find("firefly.data.job.stage.execution").timer()).isNull();
+        assertThat(meterRegistry.find("firefly.data.stage.execution").timer()).isNull();
     }
 }
 

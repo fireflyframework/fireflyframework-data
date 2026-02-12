@@ -134,12 +134,12 @@ class AutomaticFeaturesE2ETest {
         // Then verify ALL automatic features were applied:
 
         // 1. OBSERVABILITY - Metrics were recorded
-        assertThat(meterRegistry.find("firefly.data.job.stage.execution")
+        assertThat(meterRegistry.find("firefly.data.stage.execution")
                 .tag("stage", "ALL")
                 .tag("status", "success")
                 .timer()).isNotNull();
         
-        assertThat(meterRegistry.find("firefly.data.job.stage.count")
+        assertThat(meterRegistry.find("firefly.data.stage.count")
                 .tag("stage", "ALL")
                 .tag("status", "success")
                 .counter()).isNotNull();
@@ -221,7 +221,7 @@ class AutomaticFeaturesE2ETest {
         assertThat(attemptCount.get()).isEqualTo(3);
 
         // Verify metrics recorded both failures and success
-        assertThat(meterRegistry.find("firefly.data.job.stage.execution")
+        assertThat(meterRegistry.find("firefly.data.stage.execution")
                 .tag("stage", "ALL")
                 .timer()).isNotNull();
     }
@@ -250,12 +250,12 @@ class AutomaticFeaturesE2ETest {
         // Then verify failure was recorded:
 
         // 1. Metrics recorded the failure
-        assertThat(meterRegistry.find("firefly.data.job.stage.execution")
+        assertThat(meterRegistry.find("firefly.data.stage.execution")
                 .tag("stage", "ALL")
                 .tag("status", "failure")
                 .timer()).isNotNull();
 
-        assertThat(meterRegistry.find("firefly.data.job.error")
+        assertThat(meterRegistry.find("firefly.data.error")
                 .tag("stage", "ALL")
                 .tag("error.type", "IllegalArgumentException")
                 .counter()).isNotNull();
