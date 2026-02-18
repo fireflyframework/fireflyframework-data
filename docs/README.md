@@ -1,10 +1,10 @@
-# fireflyframework-data Documentation
+# fireflyframework-starter-data Documentation
 
-Welcome to the **fireflyframework-data** library documentation! This library provides a standardized, production-ready foundation for building data processing microservices in the Firefly ecosystem.
+Welcome to the **fireflyframework-starter-data** starter documentation! This starter provides a standardized, production-ready foundation for building data processing microservices in the Firefly ecosystem.
 
-## 📖 What is fireflyframework-data?
+## 📖 What is fireflyframework-starter-data?
 
-`fireflyframework-data` is a Spring Boot library that provides two main capabilities:
+`fireflyframework-starter-data` is an opinionated Spring Boot starter that provides two main capabilities:
 
 ### 1. **Data Jobs** - Orchestrated Workflows
 For executing complex, multi-step workflows that interact with external systems (databases, APIs, file systems, etc.).
@@ -110,7 +110,7 @@ Add the following to your `pom.xml`:
     <!-- Firefly Common Data Library -->
     <dependency>
         <groupId>org.fireflyframework</groupId>
-        <artifactId>fireflyframework-data</artifactId>
+        <artifactId>fireflyframework-starter-data</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </dependency>
 </dependencies>
@@ -168,7 +168,7 @@ The library follows **Hexagonal Architecture** (Ports and Adapters):
 │  └──────────────┘              └──────────────┘        │
 │         ↓                              ↓               │
 │  ┌──────────────────────────────────────────────┐      │
-│  │         fireflyframework-data (Core)               │      │
+│  │         fireflyframework-starter-data (Core)               │      │
 │  │                                              │      │
 │  │  - Abstract base classes                     │      │
 │  │  - Observability (automatic)                 │      │

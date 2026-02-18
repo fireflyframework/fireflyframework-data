@@ -109,6 +109,7 @@ public class DataEnrichmentAutoConfiguration {
      *
      * <p>Spring will inject all DataEnricher beans into the List parameter.</p>
      */
+    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnProperty(
         prefix = "firefly.data.enrichment",
@@ -126,6 +127,7 @@ public class DataEnrichmentAutoConfiguration {
      *
      * <p>This generator creates tenant-isolated cache keys for enrichment requests.</p>
      */
+    @ConditionalOnMissingBean
     @Bean
     public EnrichmentCacheKeyGenerator enrichmentCacheKeyGenerator(ObjectMapper objectMapper) {
         log.info("Creating EnrichmentCacheKeyGenerator bean");
@@ -143,6 +145,7 @@ public class DataEnrichmentAutoConfiguration {
      *
      * <p>The cache service provides tenant-isolated caching of enrichment results.</p>
      */
+    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnProperty(
         prefix = "firefly.data.enrichment",
@@ -169,6 +172,7 @@ public class DataEnrichmentAutoConfiguration {
      *
      * <p>The cache service provides tenant-isolated caching of provider operation results.</p>
      */
+    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnProperty(
         prefix = "firefly.data.enrichment.operations",

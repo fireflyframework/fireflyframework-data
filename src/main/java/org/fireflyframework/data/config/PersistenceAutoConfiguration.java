@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Optional;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 
 /**
  * Auto-configuration for job persistence features.
@@ -98,6 +99,7 @@ public class PersistenceAutoConfiguration {
      * This service will work even if no JobAuditRepository adapter is provided,
      * but audit operations will be no-ops in that case.
      */
+    @ConditionalOnMissingBean
     @Bean
     public JobAuditService jobAuditService(
             Optional<JobAuditRepository> auditRepository,
@@ -122,6 +124,7 @@ public class PersistenceAutoConfiguration {
      * This service will work even if no JobExecutionResultRepository adapter is provided,
      * but result persistence operations will be no-ops in that case.
      */
+    @ConditionalOnMissingBean
     @Bean
     public JobExecutionResultService jobExecutionResultService(
             Optional<JobExecutionResultRepository> resultRepository,

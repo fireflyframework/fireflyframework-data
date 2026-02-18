@@ -2,8 +2,8 @@ org.fireflyframework.data.config.EdaAutoConfiguration
 org.fireflyframework.data.config.CqrsAutoConfiguration
 org.fireflyframework.data.config.JobOrchestrationAutoConfiguration
 org.fireflyframework.data.config.TransactionalEngineAutoConfiguration
-org.fireflyframework.data.config.StepBridgeConfiguration
+org.fireflyframework.data.config.StepBridgeAutoConfiguration
 org.fireflyframework.data.config.ObservabilityAutoConfiguration
-org.fireflyframework.data.resiliency.ResiliencyConfiguration
+org.fireflyframework.data.resiliency.ResiliencyAutoConfiguration
 org.fireflyframework.data.config.PersistenceAutoConfiguration
 org.fireflyframework.data.config.DataEnrichmentAutoConfiguration

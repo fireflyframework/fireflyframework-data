@@ -26,7 +26,7 @@
     <logger name="org.fireflyframework.cache" level="ERROR" />
     <logger name="org.fireflyframework.eventsourcing" level="ERROR" />
 
-    <!-- fireflyframework-data loggers -->
+    <!-- fireflyframework-starter-data loggers -->
     <!-- Suppress expected validation errors in tests -->
     <logger name="org.fireflyframework.data.operation.AbstractProviderOperation" level="OFF" />
     <logger name="org.fireflyframework.data.enrichment.EnrichmentRequestValidator" level="OFF" />

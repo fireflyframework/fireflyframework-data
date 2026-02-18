@@ -67,9 +67,9 @@ import static org.junit.jupiter.api.Assertions.*;
         "firefly.data.orchestration.observability.metric-prefix=test.firefly.data.job",
         "firefly.data.orchestration.health-check.enabled=true",
         "firefly.data.orchestration.health-check.timeout=PT5S",
-        "firefly.stepevents.enabled=true",
-        "firefly.stepevents.topic=test-step-events",
-        "firefly.stepevents.include-job-context=true",
+        "firefly.data.stepevents.enabled=true",
+        "firefly.data.stepevents.topic=test-step-events",
+        "firefly.data.stepevents.include-job-context=true",
         "firefly.data.eda.enabled=false",
         "firefly.data.cqrs.enabled=false",
         "firefly.data.transactional.enabled=false"

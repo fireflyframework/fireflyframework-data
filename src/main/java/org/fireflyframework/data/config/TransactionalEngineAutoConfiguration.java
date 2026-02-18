@@ -20,15 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 
 /**
- * Auto-configuration for lib-transactional-engine integration with fireflyframework-data.
- * 
+ * Auto-configuration for lib-transactional-engine integration with fireflyframework-starter-data.
+ *
  * This configuration enables saga and transactional workflow support for core-data microservices,
  * allowing them to coordinate distributed transactions across data processing operations.
  */
-@Configuration
+@AutoConfiguration
 @ConditionalOnClass(name = {
     "org.fireflyframework.transactional.annotations.Saga",
     "org.fireflyframework.transactional.saga.events.StepEventPublisher"
@@ -41,6 +41,6 @@ import org.springframework.context.annotation.Configuration;
 public class TransactionalEngineAutoConfiguration {
     
     public TransactionalEngineAutoConfiguration() {
-        log.info("Enabling lib-transactional-engine integration for fireflyframework-data");
+        log.info("Enabling lib-transactional-engine integration for fireflyframework-starter-data");
     }
 }

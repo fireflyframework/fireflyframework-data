@@ -1,6 +1,6 @@
 # Data Jobs Documentation (Internal Index)
 
-This folder contains the canonical documentation for Data Jobs in fireflyframework-data.
+This folder contains the canonical documentation for Data Jobs in fireflyframework-starter-data.
 
 - Canonical guide: [guide.md](guide.md)
 - This README exists to help you quickly find the right entry point and understand scope based on the actual code in this repository.

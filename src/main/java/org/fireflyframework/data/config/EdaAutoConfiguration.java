@@ -20,15 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 
 /**
- * Auto-configuration for fireflyframework-eda integration with fireflyframework-data.
+ * Auto-configuration for fireflyframework-eda integration with fireflyframework-starter-data.
  *
  * This configuration enables event-driven architecture support for core-data microservices,
  * allowing them to publish and consume events related to data processing jobs.
  */
-@Configuration(value = "dataEdaAutoConfiguration")
+@AutoConfiguration(value = "dataEdaAutoConfiguration")
 @ConditionalOnClass(name = {
     "org.fireflyframework.eda.publisher.EventPublisher",
     "org.fireflyframework.eda.subscriber.EventSubscriber"
@@ -41,6 +41,6 @@ import org.springframework.context.annotation.Configuration;
 public class EdaAutoConfiguration {
 
     public EdaAutoConfiguration() {
-        log.info("Enabling fireflyframework-eda integration for fireflyframework-data");
+        log.info("Enabling fireflyframework-eda integration for fireflyframework-starter-data");
     }
 }

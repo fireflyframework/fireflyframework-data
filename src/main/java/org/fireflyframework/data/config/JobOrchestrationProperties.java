@@ -18,12 +18,14 @@ package org.fireflyframework.data.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
 
 /**
- * Configuration properties for job orchestration in fireflyframework-data.
+ * Configuration properties for job orchestration in fireflyframework-starter-data.
  */
+@Validated
 @ConfigurationProperties(prefix = "firefly.data.orchestration")
 @Data
 public class JobOrchestrationProperties {

@@ -30,15 +30,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 
 /**
- * Auto-configuration for job orchestration in fireflyframework-data.
- * 
+ * Auto-configuration for job orchestration in fireflyframework-starter-data.
+ *
  * This configuration enables the job orchestration infrastructure for core-data microservices,
  * providing support for workflow management through various orchestrators like AWS Step Functions.
  */
-@Configuration
+@AutoConfiguration
 @ConditionalOnProperty(prefix = "firefly.data.orchestration", name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties({JobOrchestrationProperties.class, DataConfiguration.class})
 @ComponentScan(basePackages = {
@@ -55,7 +55,7 @@ import org.springframework.context.annotation.Configuration;
 public class JobOrchestrationAutoConfiguration {
     
     public JobOrchestrationAutoConfiguration(JobOrchestrationProperties properties) {
-        log.info("Enabling job orchestration for fireflyframework-data with orchestrator type: {}", 
+        log.info("Enabling job orchestration for fireflyframework-starter-data with orchestrator type: {}",
                 properties.getOrchestratorType());
     }
     

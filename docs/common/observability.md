@@ -1,6 +1,6 @@
 # Observability
 
-This document describes the observability features in fireflyframework-data, including distributed tracing, metrics collection, and health checks.
+This document describes the observability features in fireflyframework-starter-data, including distributed tracing, metrics collection, and health checks.
 
 ## Table of Contents
 

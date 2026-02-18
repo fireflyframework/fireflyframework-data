@@ -1,6 +1,6 @@
 # MapStruct Mappers
 
-Complete guide to result transformation using MapStruct in `fireflyframework-data`.
+Complete guide to result transformation using MapStruct in `fireflyframework-starter-data`.
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@ Complete guide to result transformation using MapStruct in `fireflyframework-dat
 
 ## Overview
 
-The `fireflyframework-data` library uses **MapStruct** for transforming raw job results into typed DTOs during the **RESULT stage**.
+The `fireflyframework-starter-data` starter uses **MapStruct** for transforming raw job results into typed DTOs during the **RESULT stage**.
 
 ### Why MapStruct?
 

@@ -18,12 +18,14 @@ package org.fireflyframework.data.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * Main configuration properties for firefly.data namespace.
  * This is the root configuration that encompasses all data library features.
  */
+@Validated
 @ConfigurationProperties(prefix = "firefly.data")
 @Data
 public class DataConfiguration {

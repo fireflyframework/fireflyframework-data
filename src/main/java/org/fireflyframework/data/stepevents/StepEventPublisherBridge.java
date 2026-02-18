@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * Bridges StepEvents from lib-transactional-engine to fireflyframework-eda's EventPublisher.
  * <p>
- * This bridge allows SAGA step events for data processing jobs to be published through 
+ * This bridge allows SAGA step events for data processing jobs to be published through
  * the unified EDA infrastructure, enabling step events to leverage all EDA features including:
  * <ul>
  *   <li>Multi-platform support (Kafka, RabbitMQ, SQS, etc.)</li>
@@ -56,7 +56,7 @@ public class StepEventPublisherBridge implements StepEventPublisher {
     public StepEventPublisherBridge(String defaultTopic, EventPublisher edaPublisher) {
         this.edaPublisher = edaPublisher;
         this.defaultTopic = defaultTopic;
-        log.info("Initialized StepEventPublisherBridge for fireflyframework-data with default topic: {}", defaultTopic);
+        log.info("Initialized StepEventPublisherBridge for fireflyframework-starter-data with default topic: {}", defaultTopic);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class StepEventPublisherBridge implements StepEventPublisher {
 
         // Add data-specific context
         headers.put("context", "data-processing");
-        headers.put("library", "fireflyframework-data");
+        headers.put("library", "fireflyframework-starter-data");
 
         // Set routing key if not already set (important for partitioning in Kafka)
         if (stepEvent.getKey() == null || stepEvent.getKey().isEmpty()) {

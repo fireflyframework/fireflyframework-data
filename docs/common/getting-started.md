@@ -1,10 +1,10 @@
 # Getting Started
 
-This guide will walk you through setting up and using the `fireflyframework-data` library in your microservice.
+This guide will walk you through setting up and using the `fireflyframework-starter-data` starter in your microservice.
 
 ## Overview
 
-The `fireflyframework-data` library provides **two distinct architecture patterns** for building data processing microservices:
+The `fireflyframework-starter-data` starter provides **two distinct architecture patterns** for building data processing microservices:
 
 ### 1. **Data Jobs** - Orchestrated Workflow Pattern
 
@@ -91,7 +91,7 @@ For **fetching and integrating data** from third-party providers (credit bureaus
 | Use Case | Additional Requirements |
 |----------|------------------------|
 | **Async Data Jobs** | Access to orchestrator (Apache Airflow, AWS Step Functions, or mock for dev) |
-| **Sync Data Jobs** | None (all included in fireflyframework-data) |
+| **Sync Data Jobs** | None (all included in fireflyframework-starter-data) |
 | **Data Enrichers** | Access to third-party provider APIs + API credentials |
 
 ---
@@ -107,7 +107,7 @@ Add the following to your `pom.xml`:
     <!-- Firefly Common Data Library -->
     <dependency>
         <groupId>org.fireflyframework</groupId>
-        <artifactId>fireflyframework-data</artifactId>
+        <artifactId>fireflyframework-starter-data</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </dependency>
     
@@ -1538,5 +1538,5 @@ Now that you have a basic implementation:
 
 ---
 
-**Congratulations!** 🎉 You've successfully set up a data processing microservice using `fireflyframework-data`.
+**Congratulations!** 🎉 You've successfully set up a data processing microservice using `fireflyframework-starter-data`.
 

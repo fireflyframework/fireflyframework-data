@@ -18,6 +18,7 @@ package org.fireflyframework.data.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * Configuration properties for data enrichment.
@@ -39,6 +40,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * }</pre>
  */
 @Data
+@Validated
 @ConfigurationProperties(prefix = "firefly.data.enrichment")
 public class DataEnrichmentProperties {
     

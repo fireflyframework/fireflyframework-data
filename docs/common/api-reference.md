@@ -1,6 +1,6 @@
 # API Reference
 
-Complete API reference for `fireflyframework-data`.
+Complete API reference for `fireflyframework-starter-data`.
 
 ## Table of Contents
 

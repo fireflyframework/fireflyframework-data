@@ -1,8 +1,8 @@
 # Examples
 
-Real-world usage examples for `fireflyframework-data`.
+Real-world usage examples for `fireflyframework-starter-data`.
 
-> **Note**: These examples demonstrate usage patterns and integration scenarios. Some examples reference external services (cache, database, SAGA orchestrator) that are not part of this library but show how to integrate fireflyframework-data with other components in your application.
+> **Note**: These examples demonstrate usage patterns and integration scenarios. Some examples reference external services (cache, database, SAGA orchestrator) that are not part of this starter but show how to integrate fireflyframework-starter-data with other components in your application.
 
 ## Table of Contents
 
@@ -492,7 +492,7 @@ public class CustomerDataEventListener {
 
 ## SAGA Integration
 
-> **Note**: This example demonstrates integration with `lib-transactional-engine` (SAGA orchestrator). The `SagaOrchestrator`, `Saga`, and `Step` classes are from that library, not from fireflyframework-data. This library provides `StepEventPublisherBridge` to publish step events to the SAGA engine.
+> **Note**: This example demonstrates integration with `lib-transactional-engine` (SAGA orchestrator). The `SagaOrchestrator`, `Saga`, and `Step` classes are from that library, not from fireflyframework-starter-data. This starter provides `StepEventPublisherBridge` to publish step events to the SAGA engine.
 
 ### Example 8: Multi-Step Data Processing SAGA
 

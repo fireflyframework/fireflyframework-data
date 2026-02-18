@@ -1,6 +1,6 @@
 # Architecture
 
-This document provides a comprehensive overview of the `fireflyframework-data` architecture, design patterns, and integration points.
+This document provides a comprehensive overview of the `fireflyframework-starter-data` architecture, design patterns, and integration points.
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@ This document provides a comprehensive overview of the `fireflyframework-data` a
 
 ## Overview
 
-The `fireflyframework-data` library is built on **Hexagonal Architecture** (also known as Ports and Adapters pattern), which provides:
+The `fireflyframework-starter-data` starter is built on **Hexagonal Architecture** (also known as Ports and Adapters pattern), which provides:
 
 - **Clean separation** between business logic and infrastructure
 - **Pluggable adapters** for different orchestration platforms
@@ -73,7 +73,7 @@ The `fireflyframework-data` library is built on **Hexagonal Architecture** (also
 │  │                                                    │         │
 │  └────────────────────────────────────────────────────┘         │
 │                                                                 │
-│                    fireflyframework-data                              │
+│                    fireflyframework-starter-data                              │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -286,7 +286,7 @@ stepevents/
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                  fireflyframework-data                        │
+│                  fireflyframework-starter-data                        │
 │                                                         │
 │  ┌────────────────────────────────────────────┐         │
 │  │  Job Events                                │         │
@@ -333,7 +333,7 @@ stepevents/
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│              fireflyframework-data                            │
+│              fireflyframework-starter-data                            │
 │                                                         │
 │  ┌────────────────────────────────────────────┐         │
 │  │  DataJobService                            │         │
@@ -381,7 +381,7 @@ stepevents/
                 │
                 ▼
 ┌─────────────────────────────────────────────────────────┐
-│              fireflyframework-data                            │
+│              fireflyframework-starter-data                            │
 │                                                         │
 │  ┌────────────────────────────────────────────┐         │
 │  │  StepEventPublisherBridge                  │         │
@@ -582,7 +582,7 @@ Client          Controller      Service         Orchestrator    Mapper          
 
 ## Summary
 
-The `fireflyframework-data` architecture provides:
+The `fireflyframework-starter-data` architecture provides:
 
 ✅ **Clean Architecture** - Hexagonal design with clear boundaries
 ✅ **Flexibility** - Pluggable adapters for different platforms

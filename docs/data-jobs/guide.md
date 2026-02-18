@@ -1,10 +1,10 @@
 # Data Jobs — Complete Guide
 
-> **Complete guide for building data processing jobs with fireflyframework-data**
+> **Complete guide for building data processing jobs with fireflyframework-starter-data**
 >
 > **Time**: 1-2 hours | **Prerequisites**: Java 21+, Maven 3.8+, Spring Boot 3.x, WebFlux
 
-This is the complete, canonical guide for implementing Data Jobs with fireflyframework-data. It consolidates and replaces all previous Data Jobs documents (step-by-step, lifecycle, sync jobs, multiple jobs example, SAGA integration, etc.).
+This is the complete, canonical guide for implementing Data Jobs with fireflyframework-starter-data. It consolidates and replaces all previous Data Jobs documents (step-by-step, lifecycle, sync jobs, multiple jobs example, SAGA integration, etc.).
 
 If you need orchestrated workflows (async or quick sync operations) in your core-data microservice, this guide has everything you need.
 
@@ -672,12 +672,12 @@ Response to Client
 
 ### Step 1: Add Dependency
 
-Add `fireflyframework-data` to your `pom.xml`:
+Add `fireflyframework-starter-data` to your `pom.xml`:
 
 ```xml
 <dependency>
   <groupId>org.fireflyframework</groupId>
-  <artifactId>fireflyframework-data</artifactId>
+  <artifactId>fireflyframework-starter-data</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 </dependency>
 
@@ -2139,7 +2139,7 @@ curl http://localhost:8080/actuator/configprops | jq '.contexts.application.bean
 ```java
 @SpringBootApplication
 @ComponentScan(basePackages = {
-    "org.fireflyframework.data",  // Required for fireflyframework-data
+    "org.fireflyframework.data",  // Required for fireflyframework-starter-data
     "com.example.customer"       // Your application packages
 })
 public class CustomerDataServiceApplication {
@@ -2341,7 +2341,7 @@ A:
 
 ### Migration Questions
 
-**Q: How do I migrate from custom job implementation to fireflyframework-data?**
+**Q: How do I migrate from custom job implementation to fireflyframework-starter-data?**
 
 A:
 1. Create service extending `AbstractResilientDataJobService`

@@ -7,16 +7,16 @@
     <parent>
         <groupId>org.fireflyframework</groupId>
         <artifactId>fireflyframework-parent</artifactId>
-        <version>26.02.04</version>
+        <version>26.02.05</version>
         <relativePath/>
     </parent>
 
-    <artifactId>fireflyframework-data</artifactId>
-    <version>26.02.04</version>
+    <artifactId>fireflyframework-starter-data</artifactId>
+    <version>26.02.05</version>
     <packaging>jar</packaging>
 
-    <name>Firefly Framework - Common Data Library</name>
-    <description>A powerful Spring Boot library that enables data processing architecture for core-data microservices with job orchestration support, CQRS, and event-driven architecture capabilities.</description>
+    <name>Firefly Framework - Starter Data</name>
+    <description>Starter for data-processing microservices. Enables data processing architecture with job orchestration, CQRS, and event-driven capabilities.</description>
 
     <dependencies>
         <!-- Spring Boot WebFlux -->

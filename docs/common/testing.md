@@ -1,6 +1,6 @@
 # Testing Guide
 
-Comprehensive testing strategies for `fireflyframework-data`.
+Comprehensive testing strategies for `fireflyframework-starter-data`.
 
 ## Table of Contents
 

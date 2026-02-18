@@ -18,6 +18,7 @@ package org.fireflyframework.data.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * Configuration properties for SAGA Step Events in core-data microservices.
@@ -30,7 +31,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * This is particularly useful when data processing jobs are orchestrated using SAGAs
  * to coordinate distributed operations across multiple services or job stages.
  */
-@ConfigurationProperties(prefix = "firefly.stepevents")
+@Validated
+@ConfigurationProperties(prefix = "firefly.data.stepevents")
 @Data
 public class StepEventsProperties {
 

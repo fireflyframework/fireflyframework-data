@@ -28,19 +28,21 @@ import io.github.resilience4j.retry.RetryConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 
 /**
  * Configuration for resiliency patterns using Resilience4j.
  */
-@Configuration
+@AutoConfiguration
 @ConditionalOnProperty(prefix = "firefly.data.orchestration", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Slf4j
-public class ResiliencyConfiguration {
+public class ResiliencyAutoConfiguration {
 
     /**
      * Creates a circuit breaker for job orchestrator operations.
      */
+    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnProperty(prefix = "firefly.data.orchestration.resiliency", name = "circuit-breaker-enabled", havingValue = "true", matchIfMissing = true)
     public CircuitBreaker jobOrchestratorCircuitBreaker(JobOrchestrationProperties properties) {
@@ -72,6 +74,7 @@ public class ResiliencyConfiguration {
     /**
      * Creates a retry mechanism for job orchestrator operations.
      */
+    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnProperty(prefix = "firefly.data.orchestration.resiliency", name = "retry-enabled", havingValue = "true", matchIfMissing = true)
     public Retry jobOrchestratorRetry(JobOrchestrationProperties properties) {
@@ -99,6 +102,7 @@ public class ResiliencyConfiguration {
     /**
      * Creates a rate limiter for job orchestrator operations.
      */
+    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnProperty(prefix = "firefly.data.orchestration.resiliency", name = "rate-limiter-enabled", havingValue = "true")
     public RateLimiter jobOrchestratorRateLimiter(JobOrchestrationProperties properties) {
@@ -126,6 +130,7 @@ public class ResiliencyConfiguration {
     /**
      * Creates a bulkhead for job orchestrator operations.
      */
+    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnProperty(prefix = "firefly.data.orchestration.resiliency", name = "bulkhead-enabled", havingValue = "true")
     public Bulkhead jobOrchestratorBulkhead(JobOrchestrationProperties properties) {

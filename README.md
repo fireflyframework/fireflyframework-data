@@ -1,11 +1,11 @@
-# Firefly Framework - Data
+# Firefly Framework - Starter Data
 
-[![CI](https://github.com/fireflyframework/fireflyframework-data/actions/workflows/ci.yml/badge.svg)](https://github.com/fireflyframework/fireflyframework-data/actions/workflows/ci.yml)
+[![CI](https://github.com/fireflyframework/fireflyframework-starter-data/actions/workflows/ci.yml/badge.svg)](https://github.com/fireflyframework/fireflyframework-starter-data/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Java](https://img.shields.io/badge/Java-21%2B-orange.svg)](https://openjdk.org)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green.svg)](https://spring.io/projects/spring-boot)
 
-> Data processing library with job orchestration, data enrichment, CQRS integration, and observability for core-data microservices.
+> Opinionated starter for building data-processing microservices with job orchestration, data enrichers, CQRS, and event-driven capabilities for data-tier applications.
 
 ---
 
@@ -23,11 +23,16 @@
 
 ## Overview
 
-Firefly Framework Data provides a comprehensive data processing architecture for building core-data microservices. It includes job orchestration for batch and async data processing, a data enrichment framework with pluggable enricher operations, and integration with the framework's CQRS, EDA, and transactional engine modules.
+Firefly Framework Starter Data is an opinionated starter that provides a production-ready architecture for building data-processing microservices. It combines job orchestration for batch and async data processing with a powerful data enrichment framework for third-party provider integration, all built on hexagonal architecture principles.
 
-The library features abstract controller and service base classes that standardize RESTful endpoints for data jobs and enrichment operations. It includes built-in support for job execution tracking, audit trails, resilience patterns, and observability through metrics and tracing.
+This starter is specifically designed for data-tier microservices that need to:
+- Execute complex, orchestrated data processing workflows
+- Integrate with external data providers (credit bureaus, financial data, business intelligence)
+- Implement CQRS patterns for command/query separation
+- Build event-driven architectures with automatic event publishing
+- Support distributed transactions using SAGA patterns
 
-The data enrichment subsystem allows defining enricher operations as annotated beans that are automatically discovered, registered, and exposed through a unified API with caching, validation, and event publishing capabilities.
+The starter features abstract controller and service base classes that eliminate boilerplate, standardized RESTful endpoints, built-in job execution tracking, audit trails, resilience patterns (circuit breaker, retry, rate limiting), and comprehensive observability through metrics and distributed tracing.
 
 ## Features
 
@@ -58,7 +63,7 @@ The data enrichment subsystem allows defining enricher operations as annotated b
 ```xml
 <dependency>
     <groupId>org.fireflyframework</groupId>
-    <artifactId>fireflyframework-data</artifactId>
+    <artifactId>fireflyframework-starter-data</artifactId>
     <version>26.02.04</version>
 </dependency>
 ```

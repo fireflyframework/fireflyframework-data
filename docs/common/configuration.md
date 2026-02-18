@@ -1,6 +1,6 @@
 # Configuration Reference
 
-Complete configuration reference for `fireflyframework-data` library.
+Complete configuration reference for `fireflyframework-starter-data` starter.
 
 ## Table of Contents
 
@@ -17,7 +17,7 @@ Complete configuration reference for `fireflyframework-data` library.
 
 ## Overview
 
-The `fireflyframework-data` library uses Spring Boot's configuration mechanism with sensible defaults. All configuration is under the `firefly` namespace.
+The `fireflyframework-starter-data` starter uses Spring Boot's configuration mechanism with sensible defaults. All configuration is under the `firefly` namespace.
 
 ### Configuration Hierarchy
 
@@ -320,7 +320,7 @@ Headers:
   step.completed_at: "2025-01-15T10:30:01.5Z"
   step.result_type: "SUCCESS"
   context: "data-processing"
-  library: "fireflyframework-data"
+  library: "fireflyframework-starter-data"
   routing_key: "data-processing-saga:saga-123"
 ```
 

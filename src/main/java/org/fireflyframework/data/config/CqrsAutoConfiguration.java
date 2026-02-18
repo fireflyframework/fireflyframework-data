@@ -21,15 +21,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 
 /**
- * Auto-configuration for fireflyframework-cqrs integration with fireflyframework-data.
+ * Auto-configuration for fireflyframework-cqrs integration with fireflyframework-starter-data.
  *
  * This configuration enables CQRS (Command Query Responsibility Segregation) support
  * for core-data microservices, separating read and write operations for better scalability.
  */
-@Configuration(value = "dataCqrsAutoConfiguration")
+@AutoConfiguration(value = "dataCqrsAutoConfiguration")
 @ConditionalOnClass(name = {
     "org.fireflyframework.cqrs.command.CommandHandler",
     "org.fireflyframework.cqrs.query.QueryHandler"
@@ -43,7 +43,7 @@ import org.springframework.context.annotation.Configuration;
 public class CqrsAutoConfiguration {
 
     public CqrsAutoConfiguration(DataConfiguration dataConfiguration) {
-        log.info("Enabling fireflyframework-cqrs integration for fireflyframework-data - enabled: {}",
+        log.info("Enabling fireflyframework-cqrs integration for fireflyframework-starter-data - enabled: {}",
                 dataConfiguration.getCqrs().isEnabled());
     }
 }

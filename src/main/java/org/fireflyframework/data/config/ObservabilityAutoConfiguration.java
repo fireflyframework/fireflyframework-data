@@ -32,6 +32,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Optional;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 
 /**
  * Auto-configuration for observability features including tracing, metrics, and health checks.
@@ -44,6 +45,7 @@ public class ObservabilityAutoConfiguration {
     /**
      * Creates the job tracing service.
      */
+    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnClass(ObservationRegistry.class)
     @ConditionalOnProperty(prefix = "firefly.data.orchestration.observability", name = "tracing-enabled", havingValue = "true", matchIfMissing = true)
@@ -64,6 +66,7 @@ public class ObservabilityAutoConfiguration {
     /**
      * Creates the job metrics service.
      */
+    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnClass(MeterRegistry.class)
     @ConditionalOnProperty(prefix = "firefly.data.orchestration.observability", name = "metrics-enabled", havingValue = "true", matchIfMissing = true)
@@ -77,6 +80,7 @@ public class ObservabilityAutoConfiguration {
     /**
      * Creates the job orchestrator health indicator.
      */
+    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnEnabledHealthIndicator("jobOrchestrator")
     @ConditionalOnProperty(prefix = "firefly.data.orchestration.health-check", name = "enabled", havingValue = "true", matchIfMissing = true)

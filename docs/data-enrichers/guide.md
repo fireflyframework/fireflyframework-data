@@ -1,6 +1,6 @@
 # Data Enrichers - Complete Guide
 
-> **Complete guide for building data enricher microservices with fireflyframework-data**
+> **Complete guide for building data enricher microservices with fireflyframework-starter-data**
 >
 > **Time**: 1-2 hours | **Prerequisites**: Java 21+, Maven 3.8+, Spring Boot 3.x
 
@@ -351,9 +351,9 @@ Runtime Phase:
        ← returns [Equifax Enricher] (highest priority match)
 ```
 
-### How fireflyframework-data Implements This
+### How fireflyframework-starter-data Implements This
 
-**fireflyframework-data** provides a framework where you:
+**fireflyframework-starter-data** provides a framework where you:
 
 1. **Create one enricher per type per tenant**
    ```java
@@ -602,7 +602,7 @@ enricher.enrich(request);  // Works with any of them
 
 ### What the Library Creates Automatically
 
-When you add `fireflyframework-data` to your microservice, the library **automatically creates** these global REST controllers:
+When you add `fireflyframework-starter-data` to your microservice, the starter **automatically creates** these global REST controllers:
 
 1. **`SmartEnrichmentController`** - Smart enrichment endpoints
    - `POST /api/v1/enrichment/smart` - Single enrichment
@@ -625,7 +625,7 @@ When you add `fireflyframework-data` to your microservice, the library **automat
 **You don't create these controllers** - they are part of the library and are automatically registered via Spring Boot auto-configuration (`DataEnrichmentAutoConfiguration`).
 
 **Your microservice only needs to**:
-1. Add `fireflyframework-data` dependency
+1. Add `fireflyframework-starter-data` dependency
 2. Create enrichers with `@EnricherMetadata`
 3. That's it! The REST API is ready
 
@@ -654,8 +654,8 @@ cd core-data-credit-bureaus
     <!-- Firefly Common Data Library -->
     <dependency>
         <groupId>org.fireflyframework</groupId>
-        <artifactId>fireflyframework-data</artifactId>
-        <version>${fireflyframework-data.version}</version>
+        <artifactId>fireflyframework-starter-data</artifactId>
+        <version>${fireflyframework-starter-data.version}</version>
     </dependency>
 
     <!-- Spring Boot WebFlux -->
@@ -779,7 +779,7 @@ You **DO NOT** need to create:
 ### ✅ What You DO Need to Do
 
 You **ONLY** need to:
-1. ✅ Add `fireflyframework-data` dependency to your `pom.xml`
+1. ✅ Add `fireflyframework-starter-data` dependency to your `pom.xml`
 2. ✅ Create enricher classes with `@EnricherMetadata`
 3. ✅ That's it!
 
@@ -793,7 +793,7 @@ You **ONLY** need to:
 ├──────────────────────────────────────────────────────────────────────┤
 │                                                                      │
 │  📁 pom.xml                                                          │
-│     └── <dependency>fireflyframework-data</dependency>                     │
+│     └── <dependency>fireflyframework-starter-data</dependency>                     │
 │                                                                      │
 │  📁 src/main/java/org/fireflyframework/creditbureaus/                         │
 │     ├── 📄 Application.java (@SpringBootApplication)                 │
@@ -808,7 +808,7 @@ You **ONLY** need to:
                           Spring Boot starts
                                    ↓
 ┌──────────────────────────────────────────────────────────────────────┐
-│ fireflyframework-data Auto-Configuration Activates                         │
+│ fireflyframework-starter-data Auto-Configuration Activates                         │
 ├──────────────────────────────────────────────────────────────────────┤
 │                                                                      │
 │  1️⃣  @ComponentScan discovers "org.fireflyframework.data" package      │
@@ -853,14 +853,14 @@ You **ONLY** need to:
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key Point**: The controllers (`SmartEnrichmentController`, etc.) are **inside fireflyframework-data JAR**, not in your microservice code. Spring Boot's `@ComponentScan` from `DataEnrichmentAutoConfiguration` automatically discovers and registers them.
+**Key Point**: The controllers (`SmartEnrichmentController`, etc.) are **inside fireflyframework-starter-data JAR**, not in your microservice code. Spring Boot's `@ComponentScan` from `DataEnrichmentAutoConfiguration` automatically discovers and registers them.
 
 ### Example: Complete Microservice Structure
 
 ```
 core-data-provider-a-enricher/
 ├── pom.xml
-│   └── <dependency>fireflyframework-data</dependency>
+│   └── <dependency>fireflyframework-starter-data</dependency>
 ├── src/main/java/
 │   └── com/company/enricher/
 │       ├── ProviderACreditEnricher.java      # Your enricher
@@ -1742,7 +1742,7 @@ public class EquifaxSpainConfig {
         </dependency>
         <dependency>
             <groupId>org.fireflyframework</groupId>
-            <artifactId>fireflyframework-data</artifactId>
+            <artifactId>fireflyframework-starter-data</artifactId>
         </dependency>
     </dependencies>
 </project>
@@ -1861,7 +1861,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
     "org.fireflyframework.creditbureaus",      // Your microservice package
-    "org.fireflyframework.data"         // Required: fireflyframework-data package for auto-configuration
+    "org.fireflyframework.data"         // Required: fireflyframework-starter-data package for auto-configuration
 })
 public class CreditBureausApplication {
 
@@ -1929,7 +1929,7 @@ firefly:
       discovery:
         enabled: true                  # Enable global controllers (default: true)
 
-    # Resiliency Configuration (from fireflyframework-data orchestration)
+    # Resiliency Configuration (from fireflyframework-starter-data orchestration)
     orchestration:
       resiliency:
         circuit-breaker:
@@ -3000,7 +3000,7 @@ firefly:
         circuit-breaker-enabled: true    # Enable circuit breaker (default: true)
         rate-limiter-enabled: true       # Enable rate limiting (default: true)
 
-    # Resiliency Configuration (from fireflyframework-data orchestration)
+    # Resiliency Configuration (from fireflyframework-starter-data orchestration)
     orchestration:
       resiliency:
         circuit-breaker:
@@ -3407,7 +3407,7 @@ management:
 **Problem**: Circuit breaker/retry not working
 
 **Solutions**:
-- Verify `fireflyframework-data` orchestration resiliency is enabled
+- Verify `fireflyframework-starter-data` orchestration resiliency is enabled
 - Check `firefly.data.orchestration.resiliency.*` properties
 - Ensure `ResiliencyDecoratorService` bean is available
 - Review logs for resiliency decorator messages

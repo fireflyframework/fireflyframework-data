@@ -26,6 +26,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 
 /**
  * Auto-configuration for SAGA Step Event Bridge in core-data microservices.
@@ -48,17 +49,17 @@ import org.springframework.context.annotation.Primary;
     "org.fireflyframework.transactional.saga.events.StepEventPublisher",
     "org.fireflyframework.transactional.saga.events.StepEventEnvelope"
 })
-@ConditionalOnProperty(prefix = "firefly.stepevents", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "firefly.data.stepevents", name = "enabled", havingValue = "true", matchIfMissing = true)
 @ConditionalOnBean(EventPublisherFactory.class)
 @EnableConfigurationProperties(StepEventsProperties.class)
-public class StepBridgeConfiguration {
+public class StepBridgeAutoConfiguration {
 
     /**
      * Creates the StepEventPublisherBridge bean for data processing workflows.
      * <p>
      * This bridge uses the default EDA publisher configured in fireflyframework-eda to publish
      * step events from data processing SAGAs. The destination topic is configured via 
-     * firefly.stepevents.topic property.
+     * firefly.data.stepevents.topic property.
      * <p>
      * The bridge is marked as @Primary to ensure it's used by the transactional engine
      * when publishing step events.
@@ -67,6 +68,7 @@ public class StepBridgeConfiguration {
      * @param properties the step events configuration properties
      * @return the configured StepEventPublisherBridge
      */
+    @ConditionalOnMissingBean
     @Bean
     @Primary
     public StepEventPublisherBridge stepEventPublisherBridge(
@@ -74,7 +76,7 @@ public class StepBridgeConfiguration {
             StepEventsProperties properties) {
 
         String topic = properties.getTopic();
-        log.info("Configuring StepEventPublisherBridge for fireflyframework-data with topic: {} (includeJobContext: {})", 
+        log.info("Configuring StepEventPublisherBridge for fireflyframework-starter-data with topic: {} (includeJobContext: {})",
                 topic, properties.isIncludeJobContext());
 
         return new StepEventPublisherBridge(topic, publisherFactory.getDefaultPublisher());
