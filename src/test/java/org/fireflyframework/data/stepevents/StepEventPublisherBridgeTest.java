@@ -116,7 +116,7 @@ class StepEventPublisherBridgeTest {
         assertThat(headers).containsEntry("step.step_id", "step-1");
         assertThat(headers).containsEntry("step.type", "STEP_STARTED");
         assertThat(headers).containsEntry("context", "data-processing");
-        assertThat(headers).containsEntry("library", "fireflyframework-data");
+        assertThat(headers).containsEntry("library", "fireflyframework-starter-data");
     }
 
     @Test

@@ -34,7 +34,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Optional;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 
 /**
  * Auto-configuration for observability features including tracing, metrics, and health checks.
@@ -48,7 +47,6 @@ public class ObservabilityAutoConfiguration {
     /**
      * Creates the job tracing service.
      */
-    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnClass(ObservationRegistry.class)
     @ConditionalOnMissingBean(JobTracingService.class)
@@ -70,7 +68,6 @@ public class ObservabilityAutoConfiguration {
     /**
      * Creates the job metrics service.
      */
-    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnClass(MeterRegistry.class)
     @ConditionalOnMissingBean(JobMetricsService.class)
@@ -85,7 +82,6 @@ public class ObservabilityAutoConfiguration {
     /**
      * Creates the job orchestrator health indicator.
      */
-    @ConditionalOnMissingBean
     @Bean
     @ConditionalOnMissingBean(JobOrchestratorHealthIndicator.class)
     @ConditionalOnEnabledHealthIndicator("jobOrchestrator")
