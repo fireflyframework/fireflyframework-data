@@ -1,265 +1,246 @@
 # fireflyframework-starter-data Documentation
 
-Welcome to the **fireflyframework-starter-data** starter documentation! This starter provides a standardized, production-ready foundation for building data processing microservices in the Firefly ecosystem.
-
-## What is fireflyframework-starter-data?
-
-`fireflyframework-starter-data` is an opinionated Spring Boot starter that provides two main capabilities:
-
-### 1. **Data Jobs** - Orchestrated Workflows
-For executing complex, multi-step workflows that interact with external systems (databases, APIs, file systems, etc.).
-
-**Use Cases:**
-- Processing large datasets from external sources
-- Running ETL (Extract, Transform, Load) operations
-- Coordinating multi-step business processes
-- Batch processing and scheduled tasks
-
-**Learn More:** [Data Jobs — Complete Guide →](data-jobs/guide.md)
-
-### 2. **Data Enrichers** - Third-Party Provider Integration
-For fetching and integrating data from external third-party providers (credit bureaus, financial data providers, business intelligence services, etc.).
-
-**Use Cases:**
-- Enriching customer data with credit scores
-- Adding financial metrics from market data providers
-- Augmenting company profiles with business intelligence
-- Validating addresses or tax IDs with government services
-
-**Learn More:** [Data Enrichers Documentation →](data-enrichers/README.md)
-
-### 3. **Data Quality** - Validation & Quality Gates
-Rule-based data validation with configurable strategies (fail-fast or collect-all).
-
-**Learn More:** [Data Quality Framework →](common/data-quality.md)
-
-### 4. **Data Lineage** - Provenance Tracking
-Track data transformations and enrichments across your pipeline.
-
-**Learn More:** [Data Lineage Tracking →](common/data-lineage.md)
-
-### 5. **Data Transformation** - Post-Processing Pipelines
-Composable transformation chains for field mapping and computed fields.
-
-**Learn More:** [Data Transformation →](common/data-transformation.md)
-
-### 6. **GenAI Bridge** - Native AI Integration
-Python bridge package for `fireflyframework-genai` with tools, pipeline steps, and agent templates.
-
-**Learn More:** [GenAI Integration →](common/genai-bridge.md)
+An opinionated Spring Boot starter for building data-processing microservices with job orchestration, data enrichment, quality gates, lineage tracking, and event-driven capabilities.
 
 ---
 
-## Quick Start
+## Table of Contents
 
-### Choose Your Path
-
-**I want to build a data job microservice**
-→ See the [Data Jobs — Complete Guide](data-jobs/guide.md)
-
-**I want to build a data enricher microservice**
-→ See [Data Enrichers - Step-by-Step Guide](data-enrichers/enricher-microservice-guide.md)
-
-**I want to understand the architecture first**
-→ See [Architecture Overview](common/architecture.md)
-
-**I want to see code examples**
-→ See [Examples](common/examples.md)
+| Section | Description |
+|---------|-------------|
+| [Getting Started](#getting-started) | Installation, prerequisites, and first steps |
+| [Core Capabilities](#core-capabilities) | Data Jobs, Enrichers, Quality, Lineage, Transformation |
+| [Infrastructure](#infrastructure) | Resiliency, observability, persistence, events |
+| [Reference](#reference) | API docs, configuration, architecture, examples |
+| [GenAI Integration](#genai-integration) | Python bridge for fireflyframework-genai |
 
 ---
 
-## Documentation Structure
+## Getting Started
 
-### [Data Jobs — Complete Guide](data-jobs/guide.md)
-Documentation for building orchestrated workflows (async and sync) in one place.
+### Prerequisites
 
-### [Data Enrichers](data-enrichers/README.md)
-Documentation for integrating with third-party providers:
-- **[Step-by-Step Guide](data-enrichers/enricher-microservice-guide.md)** - Complete guide from scratch
-- **[Data Enrichment Reference](data-enrichers/data-enrichment.md)** - Complete reference guide
+- Java 25
+- Maven 3.9+
+- Spring Boot 3.x
+- Familiarity with reactive programming (Project Reactor)
 
-### [Common Documentation](common/README.md)
-Shared concepts, architecture, and utilities:
-- **[Architecture Overview](common/architecture.md)** - Hexagonal architecture and design patterns
-- **[Configuration Reference](common/configuration.md)** - Comprehensive configuration options
-- **[Observability](common/observability.md)** - Distributed tracing, metrics, health checks
-- **[Resiliency](common/resiliency.md)** - Circuit breaker, retry, rate limiting patterns
-- **[Logging](common/logging.md)** - Comprehensive logging guide
-- **[Testing](common/testing.md)** - Testing strategies and examples
-- **[MapStruct Mappers](common/mappers.md)** - Data transformation guide
-- **[API Reference](common/api-reference.md)** - Complete API documentation
-- **[Examples](common/examples.md)** - Real-world usage patterns
-
-### [Advanced Capabilities](common/)
-- **[Data Quality Framework](common/data-quality.md)** - Rule-based validation and quality gates
-- **[Data Lineage Tracking](common/data-lineage.md)** - Provenance and audit trail
-- **[Data Transformation](common/data-transformation.md)** - Post-enrichment transformation pipelines
-- **[GenAI Bridge](common/genai-bridge.md)** - Integration with fireflyframework-genai
-
----
-
-## Common Tasks
-
-### Getting Started
-- **[Install the library](#installation)** - Add to your project
-- **[Create your first data job](data-jobs/guide.md)** - Complete guide (async and sync)
-- **[Create your first enricher](data-enrichers/enricher-microservice-guide.md)** - Step-by-step guide
-
-### Configuration
-- **[Configure orchestrators](common/configuration.md#orchestration-configuration)** - Airflow, AWS Step Functions, Mock
-- **[Configure observability](common/observability.md)** - Tracing, metrics, health checks
-- **[Configure resiliency](common/resiliency.md)** - Circuit breaker, retry, rate limiting
-
-### Advanced Topics
-- **[Implement SAGA patterns](data-jobs/guide.md#saga-and-step-events)** - Distributed transactions
-- **[Create custom operations](data-enrichers/data-enrichment.md#provider-specific-custom-operations)** - Provider-specific workflows
-- **[Test your code](common/testing.md)** - Unit and integration testing
-
----
-
-## Installation
-
-### Maven
-
-Add the following to your `pom.xml`:
+### Installation
 
 ```xml
-<!-- Use Firefly's parent POM for standardized dependency management -->
 <parent>
     <groupId>org.fireflyframework</groupId>
     <artifactId>fireflyframework-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>26.02.06</version>
     <relativePath/>
 </parent>
 
 <dependencies>
-    <!-- Firefly Common Data Library -->
     <dependency>
         <groupId>org.fireflyframework</groupId>
         <artifactId>fireflyframework-starter-data</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>26.02.06</version>
     </dependency>
 </dependencies>
 ```
 
-### Prerequisites
+### First Steps
 
-- **Java 21+** - Required for virtual threads and modern language features
-- **Maven 3.8+** or Gradle 7+
-- **Spring Boot 3.x** knowledge
-- **Reactive programming** familiarity (Project Reactor)
+| Goal | Guide |
+|------|-------|
+| Understand the architecture | [Architecture Overview](common/architecture.md) |
+| Build a data job microservice | [Data Jobs Guide](data-jobs/guide.md) |
+| Build a data enricher microservice | [Data Enrichers Guide](data-enrichers/guide.md) |
+| See working code examples | [Examples](common/examples.md) |
+| Step-by-step walkthrough | [Getting Started](common/getting-started.md) |
 
 ---
 
-## Key Features
+## Core Capabilities
 
-### Automatic Observability
-- **Distributed Tracing** - Micrometer integration with OpenTelemetry
-- **Metrics Collection** - Automatic metrics for all operations
-- **Health Checks** - Ready-to-use health check endpoints
-- **Comprehensive Logging** - Structured JSON logging
+### Data Jobs
 
-### Automatic Resiliency
-- **Circuit Breaker** - Prevent cascading failures
-- **Retry Logic** - Exponential backoff with jitter
-- **Rate Limiting** - Protect external APIs
-- **Bulkhead Isolation** - Isolate failures
+Orchestrated workflows for batch and async data processing with lifecycle management (start, check, collect, result, stop).
+
+| Topic | Link |
+|-------|------|
+| Complete guide (async and sync) | [Data Jobs Guide](data-jobs/guide.md) |
+| Overview and concepts | [Data Jobs Overview](data-jobs/README.md) |
+
+Key features:
+- Abstract base classes (`AbstractResilientDataJobService`, `AbstractResilientSyncDataJobService`)
+- Standardized REST endpoints via `AbstractDataJobController`
+- Configurable per-stage timeout enforcement
+- Job execution result persistence and audit trails
+
+### Data Enrichers
+
+Third-party provider integration for fetching and enriching data from external sources (credit bureaus, financial data, business intelligence).
+
+| Topic | Link |
+|-------|------|
+| Step-by-step guide | [Data Enrichers Guide](data-enrichers/guide.md) |
+| Overview and concepts | [Data Enrichers Overview](data-enrichers/README.md) |
+
+Key features:
+- Pluggable `DataEnricher` and `EnricherOperation` framework with tenant isolation
+- Fallback chains with primary/secondary provider failover (`@EnricherFallback`)
+- Smart enrichment controller with strategy-based routing
+- Enrichment discovery controller for runtime operation catalog
+- Per-provider resiliency configuration (circuit breaker, retry, rate limiter, bulkhead)
+- Enrichment caching with configurable key generation and TTL
+- Cost tracking, estimation, and preview/dry-run support
+- SSE streaming for real-time batch enrichment results
+
+### Data Quality
+
+Rule-based validation engine with configurable severity levels and evaluation strategies.
+
+| Topic | Link |
+|-------|------|
+| Framework guide | [Data Quality](common/data-quality.md) |
+
+Key features:
+- Fail-fast and collect-all evaluation strategies
+- Built-in rules: null checks, range validation, pattern matching, custom logic
+- Quality gate integration for enrichment pipelines
+
+### Data Lineage
+
+Provenance tracking across enrichment operations and transformation pipelines.
+
+| Topic | Link |
+|-------|------|
+| Tracking guide | [Data Lineage](common/data-lineage.md) |
+
+Key features:
+- Automatic lineage recording across enrichment operations
+- Pluggable `LineageTracker` with in-memory default implementation
+- Records with source, destination, timestamp, and metadata
+
+### Data Transformation
+
+Composable, reactive transformation chains for post-enrichment data processing.
+
+| Topic | Link |
+|-------|------|
+| Transformation guide | [Data Transformation](common/data-transformation.md) |
+
+Key features:
+- Reactive `DataTransformer` interface with `TransformationChain` composition
+- Built-in transformers: `FieldMappingTransformer`, `ComputedFieldTransformer`
+- Custom transformer support via functional interface
+
+---
+
+## Infrastructure
+
+### Resiliency
+
+Fault tolerance patterns applied automatically and configurable per provider.
+
+| Topic | Link |
+|-------|------|
+| Patterns and configuration | [Resiliency](common/resiliency.md) |
+
+Includes circuit breaker, retry with exponential backoff, rate limiting, and bulkhead isolation. Supports global defaults and per-provider overrides.
+
+### Observability
+
+Monitoring, metrics, distributed tracing, and health checks.
+
+| Topic | Link |
+|-------|------|
+| Observability guide | [Observability](common/observability.md) |
+| Logging guide | [Logging](common/logging.md) |
+
+Includes Micrometer integration with OpenTelemetry, automatic metrics for all operations, health check endpoints, and structured JSON logging.
+
+### Persistence
+
+Job execution results and audit trail storage.
+
+| Topic | Link |
+|-------|------|
+| Persistence guide | [Persistence](common/persistence.md) |
 
 ### Event-Driven Architecture
-- **Automatic Event Publishing** - Job and enrichment lifecycle events
-- **CQRS Integration** - Command/Query separation
-- **SAGA Support** - Distributed transaction patterns
 
-### Data Quality and Lineage
-- **Quality Gates** - Rule-based validation with fail-fast and collect-all strategies
-- **Data Lineage** - Track provenance across enrichments and transformations
-- **Transformation Pipelines** - Composable field mapping and computed fields
+Automatic event publishing for job and enrichment lifecycle events.
 
-### Enrichment Capabilities
-- **Fallback Chains** - Automatic provider failover with `@EnricherFallback`
-- **Per-Provider Resilience** - Independent circuit breaker, retry, rate limiter per provider
-- **Cost Tracking** - Per-provider call counting and cost reports
-- **Preview/Dry-Run** - Preview enrichment routing without execution
-- **SSE Streaming** - Real-time batch enrichment results via Server-Sent Events
-- **Job Timeouts** - Configurable per-stage timeout enforcement
+| Topic | Link |
+|-------|------|
+| Architecture overview | [Architecture](common/architecture.md) |
+| Configuration | [Configuration](common/configuration.md) |
 
-### GenAI Integration
-- **Native Bridge** - Python package for `fireflyframework-genai` integration
-- **AI Agent Tools** - Data enrichment and job management as agent tools
-- **Pipeline Steps** - Enrichment and quality gate steps for GenAI pipelines
-
-### Developer Experience
-- **Abstract Base Classes** - Minimal boilerplate code
-- **Type-Safe APIs** - Compile-time safety
-- **Reactive Programming** - Non-blocking operations with Project Reactor
-- **Comprehensive Testing** - Test utilities and examples
+Includes CQRS integration, EDA auto-configuration, and orchestration engine support (Saga, TCC, Workflow).
 
 ---
 
-## Architecture
+## Reference
 
-The library follows **Hexagonal Architecture** (Ports and Adapters):
+| Document | Description |
+|----------|-------------|
+| [Architecture](common/architecture.md) | Hexagonal architecture, design patterns, component diagram |
+| [Configuration](common/configuration.md) | All configuration properties with defaults and examples |
+| [API Reference](common/api-reference.md) | REST endpoint specifications for all controllers |
+| [MapStruct Mappers](common/mappers.md) | Data mapping conventions and mapper configuration |
+| [Testing](common/testing.md) | Testing strategies, utilities, and examples |
+| [Examples](common/examples.md) | Real-world usage patterns and recipes |
+
+---
+
+## GenAI Integration
+
+Python bridge package (`fireflyframework-genai-data`) for native integration with `fireflyframework-genai`.
+
+| Topic | Link |
+|-------|------|
+| Integration guide | [GenAI Bridge](common/genai-bridge.md) |
+
+Provides:
+- `DataStarterClient` for HTTP communication with Java data services
+- Agent tools (`DataEnrichmentTool`, `DataJobTool`, `DataOperationsTool`) and `DataToolKit`
+- Pipeline steps (`EnrichmentStep`, `QualityGateStep`) for GenAI pipelines
+- `DataLineageMiddleware` for automatic lineage tracking in agent runs
+- Pre-built agent template (`create_data_analyst_agent`)
+
+---
+
+## Architecture Overview
 
 ```
-┌────────────────────────────────────────────────────────────────┐
-│                       Your Application                         │
-│                                                                │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
-│  │  Data Jobs   │  │   Enrichers  │  │  Quality &   │          │
-│  │              │  │              │  │  Lineage     │          │
-│  │  - Async     │  │  - Credit    │  │  - Rules     │          │
-│  │  - Sync      │  │  - Company   │  │  - Tracking  │          │
-│  └──────────────┘  └──────────────┘  └──────────────┘          │
-│         ↓                  ↓                  ↓                 │
-│  ┌──────────────────────────────────────────────────────┐      │
-│  │           fireflyframework-starter-data (Core)       │      │
-│  │                                                      │      │
-│  │  - Abstract base classes    - Fallback chains        │      │
-│  │  - Observability (auto)     - Cost tracking          │      │
-│  │  - Resiliency (auto/prov)   - Transformation         │      │
-│  │  - Event publishing (auto)  - Preview & SSE          │      │
-│  └──────────────────────────────────────────────────────┘      │
-│         ↓                  ↓                  ↓                 │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
-│  │ Orchestrators│  │   Providers  │  │  GenAI       │          │
-│  │              │  │              │  │  Bridge      │          │
-│  │  - Airflow   │  │  - REST APIs │  │  - Tools     │          │
-│  │  - AWS SF    │  │  - SOAP APIs │  │  - Steps     │          │
-│  │  - Mock      │  │  - gRPC APIs │  │  - Agents    │          │
-│  └──────────────┘  └──────────────┘  └──────────────┘          │
-└────────────────────────────────────────────────────────────────┘
++------------------------------------------------------------------+
+|                        Your Application                          |
+|                                                                  |
+|  +----------------+  +----------------+  +----------------+      |
+|  |   Data Jobs    |  | Data Enrichers |  | Quality &      |      |
+|  |                |  |                |  | Lineage        |      |
+|  |  - Async       |  |  - Credit      |  |  - Rules       |      |
+|  |  - Sync        |  |  - Company     |  |  - Tracking    |      |
+|  +-------+--------+  +-------+--------+  +-------+--------+      |
+|          |                    |                    |               |
+|  +-------+--------------------+--------------------+--------+     |
+|  |            fireflyframework-starter-data (Core)           |     |
+|  |                                                           |     |
+|  |  - Abstract base classes       - Fallback chains          |     |
+|  |  - Observability (automatic)   - Cost tracking            |     |
+|  |  - Resiliency (per-provider)   - Transformation chains    |     |
+|  |  - Event publishing            - Preview & SSE            |     |
+|  +-------+--------------------+--------------------+--------+     |
+|          |                    |                    |               |
+|  +-------+--------+  +-------+--------+  +-------+--------+      |
+|  | Orchestrators   |  |   Providers    |  |  GenAI Bridge  |      |
+|  |                 |  |                |  |                |      |
+|  |  - Airflow      |  |  - REST APIs   |  |  - Tools       |      |
+|  |  - AWS SF       |  |  - SOAP APIs   |  |  - Steps       |      |
+|  |  - Mock         |  |  - gRPC APIs   |  |  - Agents      |      |
+|  +-----------------+  +----------------+  +----------------+      |
++------------------------------------------------------------------+
 ```
 
-**Learn More:** [Architecture Overview](common/architecture.md)
+See [Architecture](common/architecture.md) for detailed design patterns and component documentation.
 
 ---
 
-## Documentation Index
-
-### By Feature
-- **[Data Jobs — Complete Guide](data-jobs/guide.md)** - Orchestrated workflows
-- **[Data Enrichers](data-enrichers/README.md)** - Third-party provider integration
-
-### By Topic
-- **[Architecture](common/architecture.md)** - Design patterns and principles
-- **[Configuration](common/configuration.md)** - All configuration options
-- **[Observability](common/observability.md)** - Monitoring and tracing
-- **[Resiliency](common/resiliency.md)** - Fault tolerance patterns
-- **[Testing](common/testing.md)** - Testing strategies
-- **[Examples](common/examples.md)** - Real-world code examples
-
----
-
-## Support
-
-For questions, issues, or contributions:
-- Check the [Examples](common/examples.md) for common patterns
-- Review the [API Reference](common/api-reference.md) for detailed API docs
-- See the [Architecture Overview](common/architecture.md) for design decisions
-
----
-
-## License
-
-Copyright © 2024-2026 Firefly Software Solutions Inc. All rights reserved.
-
+Copyright 2024-2026 Firefly Software Solutions Inc. All rights reserved.
