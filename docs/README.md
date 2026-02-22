@@ -28,6 +28,26 @@ For fetching and integrating data from external third-party providers (credit bu
 
 **Learn More:** [Data Enrichers Documentation →](data-enrichers/README.md)
 
+### 3. **Data Quality** - Validation & Quality Gates
+Rule-based data validation with configurable strategies (fail-fast or collect-all).
+
+**Learn More:** [Data Quality Framework →](common/data-quality.md)
+
+### 4. **Data Lineage** - Provenance Tracking
+Track data transformations and enrichments across your pipeline.
+
+**Learn More:** [Data Lineage Tracking →](common/data-lineage.md)
+
+### 5. **Data Transformation** - Post-Processing Pipelines
+Composable transformation chains for field mapping and computed fields.
+
+**Learn More:** [Data Transformation →](common/data-transformation.md)
+
+### 6. **GenAI Bridge** - Native AI Integration
+Python bridge package for `fireflyframework-genai` with tools, pipeline steps, and agent templates.
+
+**Learn More:** [GenAI Integration →](common/genai-bridge.md)
+
 ---
 
 ## 🚀 Quick Start
@@ -69,6 +89,13 @@ Shared concepts, architecture, and utilities:
 - **[MapStruct Mappers](common/mappers.md)** - Data transformation guide
 - **[API Reference](common/api-reference.md)** - Complete API documentation
 - **[Examples](common/examples.md)** - Real-world usage patterns
+
+### [New Features](common/)
+Advanced capabilities added in this release:
+- **[Data Quality Framework](common/data-quality.md)** - Rule-based validation and quality gates
+- **[Data Lineage Tracking](common/data-lineage.md)** - Provenance and audit trail
+- **[Data Transformation](common/data-transformation.md)** - Post-enrichment transformation pipelines
+- **[GenAI Bridge](common/genai-bridge.md)** - Native integration with fireflyframework-genai
 
 ---
 
@@ -144,6 +171,24 @@ Add the following to your `pom.xml`:
 - ✅ **CQRS Integration** - Command/Query separation
 - ✅ **SAGA Support** - Distributed transaction patterns
 
+### Data Quality & Lineage
+- ✅ **Quality Gates** - Rule-based validation with fail-fast and collect-all strategies
+- ✅ **Data Lineage** - Track provenance across enrichments and transformations
+- ✅ **Transformation Pipelines** - Composable field mapping and computed fields
+
+### Enrichment Enhancements
+- ✅ **Fallback Chains** - Automatic provider failover with `@EnricherFallback`
+- ✅ **Per-Provider Resilience** - Independent circuit breaker, retry, rate limiter per provider
+- ✅ **Cost Tracking** - Per-provider call counting and cost reports
+- ✅ **Preview/Dry-Run** - Preview enrichment routing without execution
+- ✅ **SSE Streaming** - Real-time batch enrichment results via Server-Sent Events
+- ✅ **Job Timeouts** - Configurable per-stage timeout enforcement
+
+### GenAI Integration
+- ✅ **Native Bridge** - Python package for `fireflyframework-genai` integration
+- ✅ **AI Agent Tools** - Data enrichment and job management as agent tools
+- ✅ **Pipeline Steps** - Enrichment and quality gate steps for GenAI pipelines
+
 ### Developer Experience
 - ✅ **Abstract Base Classes** - Minimal boilerplate code
 - ✅ **Type-Safe APIs** - Compile-time safety
@@ -157,33 +202,33 @@ Add the following to your `pom.xml`:
 The library follows **Hexagonal Architecture** (Ports and Adapters):
 
 ```
-┌────────────────────────────────────────────────────────┐
-│                   Your Application                     │
-│                                                        │
-│  ┌──────────────┐              ┌──────────────┐        │
-│  │  Data Jobs   │              │   Enrichers  │        │
-│  │              │              │              │        │
-│  │  - Async     │              │  - Credit    │        │
-│  │  - Sync      │              │  - Company   │        │
-│  └──────────────┘              └──────────────┘        │
-│         ↓                              ↓               │
-│  ┌──────────────────────────────────────────────┐      │
-│  │         fireflyframework-starter-data (Core)               │      │
-│  │                                              │      │
-│  │  - Abstract base classes                     │      │
-│  │  - Observability (automatic)                 │      │
-│  │  - Resiliency (automatic)                    │      │
-│  │  - Event publishing (automatic)              │      │
-│  └──────────────────────────────────────────────┘      │
-│         ↓                              ↓               │
-│  ┌──────────────┐              ┌──────────────┐        │
-│  │ Orchestrators│              │   Providers  │        │
-│  │              │              │              │        │
-│  │  - Airflow   │              │  - REST APIs │        │
-│  │  - AWS SF    │              │  - SOAP APIs │        │
-│  │  - Mock      │              │  - gRPC APIs │        │
-│  └──────────────┘              └──────────────┘        │
-└────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│                       Your Application                         │
+│                                                                │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│  │  Data Jobs   │  │   Enrichers  │  │  Quality &   │          │
+│  │              │  │              │  │  Lineage     │          │
+│  │  - Async     │  │  - Credit    │  │  - Rules     │          │
+│  │  - Sync      │  │  - Company   │  │  - Tracking  │          │
+│  └──────────────┘  └──────────────┘  └──────────────┘          │
+│         ↓                  ↓                  ↓                 │
+│  ┌──────────────────────────────────────────────────────┐      │
+│  │           fireflyframework-starter-data (Core)       │      │
+│  │                                                      │      │
+│  │  - Abstract base classes    - Fallback chains        │      │
+│  │  - Observability (auto)     - Cost tracking          │      │
+│  │  - Resiliency (auto/prov)   - Transformation         │      │
+│  │  - Event publishing (auto)  - Preview & SSE          │      │
+│  └──────────────────────────────────────────────────────┘      │
+│         ↓                  ↓                  ↓                 │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│  │ Orchestrators│  │   Providers  │  │  GenAI       │          │
+│  │              │  │              │  │  Bridge      │          │
+│  │  - Airflow   │  │  - REST APIs │  │  - Tools     │          │
+│  │  - AWS SF    │  │  - SOAP APIs │  │  - Steps     │          │
+│  │  - Mock      │  │  - gRPC APIs │  │  - Agents    │          │
+│  └──────────────┘  └──────────────┘  └──────────────┘          │
+└────────────────────────────────────────────────────────────────┘
 ```
 
 **Learn More:** [Architecture Overview](common/architecture.md)
@@ -217,5 +262,5 @@ For questions, issues, or contributions:
 
 ## 📝 License
 
-Copyright © 2024 Firefly. All rights reserved.
+Copyright © 2024-2026 Firefly Software Solutions Inc. All rights reserved.
 

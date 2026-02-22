@@ -276,6 +276,70 @@ orchestration/
 └── EventGateway  # Bridges orchestration events to EDA (provided by fireflyframework-orchestration)
 ```
 
+### 8. Data Quality Layer
+
+Rule-based validation framework:
+
+```
+quality/
+├── DataQualityRule<T>        # Port interface for validation rules
+├── DataQualityEngine         # Evaluates rules with strategy (FAIL_FAST / COLLECT_ALL)
+├── QualityResult             # Individual rule evaluation result
+├── QualityReport             # Aggregated report with pass/fail counts
+├── QualitySeverity           # INFO, WARNING, CRITICAL
+├── QualityStrategy           # FAIL_FAST, COLLECT_ALL
+└── rules/
+    ├── NotNullRule            # Built-in: required field validation
+    ├── PatternRule            # Built-in: regex pattern validation
+    └── RangeRule              # Built-in: numeric range validation
+```
+
+### 9. Data Lineage Layer
+
+Provenance tracking for data operations:
+
+```
+lineage/
+├── LineageTracker            # Port interface
+├── LineageRecord             # Immutable lineage entry
+└── InMemoryLineageTracker    # Default in-memory implementation
+```
+
+### 10. Data Transformation Layer
+
+Composable post-enrichment transformations:
+
+```
+transform/
+├── DataTransformer<S, T>     # Functional interface
+├── TransformationChain<S, T> # Composable chain with then()
+├── TransformContext           # Request context carrier
+├── FieldMappingTransformer   # Rename map keys
+└── ComputedFieldTransformer  # Add derived fields
+```
+
+### 11. Enrichment Fallback Layer
+
+Provider failover with chain support:
+
+```
+enrichment/
+├── @EnricherFallback         # Annotation: fallbackTo, strategy, maxFallbacks
+├── FallbackStrategy          # ON_ERROR, ON_EMPTY, ON_ERROR_OR_EMPTY
+└── FallbackEnrichmentExecutor # Recursive fallback chain executor
+```
+
+### 12. Cost Tracking Layer
+
+Per-provider enrichment cost accounting:
+
+```
+cost/
+├── EnrichmentCostTracker     # Thread-safe call counting
+├── CostReport                # Per-provider breakdown and totals
+└── EnrichmentCostController  # REST API: GET /api/v1/enrichment/costs
+```
+
 ---
 
 ## Integration Architecture
@@ -534,6 +598,35 @@ orchestration/
 - Allows independent evolution of both sides
 - Transparent integration
 
+### 7. Chain of Responsibility Pattern
+
+**Purpose:** Enrichment fallback chains
+
+**Implementation:**
+- `@EnricherFallback` annotation defines fallback provider
+- `FallbackEnrichmentExecutor` traverses the chain recursively
+- Configurable strategy (on-error, on-empty, or both)
+- Depth limiting prevents infinite chains
+
+### 8. Pipe and Filter Pattern
+
+**Purpose:** Data transformation pipelines
+
+**Implementation:**
+- `DataTransformer<S, T>` functional interface
+- `TransformationChain` composes transformers via `then()`
+- Each transformer is a filter that transforms data independently
+- Reactive execution via `Mono<T>`
+
+### 9. Observer Pattern (Event-Driven Quality)
+
+**Purpose:** Quality gate event publishing
+
+**Implementation:**
+- `DataQualityEngine` publishes `DataQualityEvent` on evaluation
+- `InMemoryLineageTracker` publishes `LineageEvent` on record
+- Spring's `ApplicationEventPublisher` for decoupled notifications
+
 ---
 
 ## Component Interactions
@@ -590,6 +683,11 @@ The `fireflyframework-starter-data` architecture provides:
 ✅ **Scalability** - Reactive programming and CQRS support
 ✅ **Observability** - Built-in event publishing and tracing
 ✅ **Reliability** - SAGA pattern for distributed transactions
+✅ **Data Quality** - Rule-based validation with configurable strategies
+✅ **Data Lineage** - Provenance tracking for all data operations
+✅ **Transformation Pipelines** - Composable post-enrichment processing
+✅ **Fallback Chains** - Automatic provider failover
+✅ **GenAI Bridge** - Native integration with fireflyframework-genai
 
 For more details, see:
 - [Job Lifecycle](../data-jobs/guide.md#job-lifecycle-async) - Detailed stage documentation for async jobs

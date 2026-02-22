@@ -148,6 +148,13 @@ The complete guide covers everything you need to know:
 11. **Testing** - Unit and integration testing
 12. **Configuration** - Complete configuration reference
 13. **Best Practices** - Production-ready patterns
+14. **Fallback Chains** - Automatic provider failover
+15. **Cost Tracking** - Per-provider enrichment costs
+16. **Preview & Streaming** - Dry-run and SSE endpoints
+17. **Data Quality** - Validation gates for enrichment output
+18. **Data Lineage** - Provenance tracking
+19. **Data Transformation** - Post-enrichment processing
+20. **GenAI Integration** - AI agent tools and pipeline steps
 
 ---
 
@@ -170,6 +177,20 @@ The library **automatically creates** these controllers - you don't need to crea
   - Health check for all enrichers
   - Filterable by type and tenant
 
+- ✅ **`SmartEnrichmentController`** - `POST /api/v1/enrichment/smart/preview`
+  - Preview which enricher would handle a request without executing it
+  - Returns provider name, priority, cached status
+
+- ✅ **`SmartEnrichmentController`** - `POST /api/v1/enrichment/smart/stream`
+  - Stream batch enrichment results via Server-Sent Events
+  - Real-time progress for multiple enrichment requests
+
+- ✅ **`EnrichmentCostController`** - `GET /api/v1/enrichment/costs`
+  - View per-provider enrichment costs and call counts
+
+- ✅ **`DataExceptionHandler`** - Global error handling
+  - Maps `EnrichmentValidationException` to HTTP 400 with detailed error body
+
 ### Enterprise Features (Built-in)
 - ✅ **Observability** - Distributed tracing, metrics, logging
 - ✅ **Resiliency** - Circuit breaker, retry, rate limiting, timeout
@@ -177,6 +198,14 @@ The library **automatically creates** these controllers - you don't need to crea
 - ✅ **Caching** - Configurable caching layer
 - ✅ **Multi-Tenancy** - Native support for multiple tenants
 - ✅ **Priority-Based Selection** - Control which provider is used
+- ✅ **Fallback Chains** - Automatic provider failover via `@EnricherFallback`
+- ✅ **Per-Provider Resilience** - Independent resilience patterns per provider
+- ✅ **Cost Tracking** - Per-provider call counting and cost reports
+- ✅ **Preview/Dry-Run** - Preview enrichment routing without execution
+- ✅ **SSE Streaming** - Real-time batch enrichment via Server-Sent Events
+- ✅ **Data Quality** - Rule-based validation of enrichment output
+- ✅ **Data Lineage** - Provenance tracking for enrichment operations
+- ✅ **Data Transformation** - Post-enrichment field mapping and computed fields
 
 ### What This Means
 You **only write business logic** (enrichers). The library handles:
@@ -186,6 +215,9 @@ You **only write business logic** (enrichers). The library handles:
 - ✅ Observability
 - ✅ Resiliency
 - ✅ Caching
+- ✅ Fallback chains
+- ✅ Cost tracking
+- ✅ Quality validation
 
 ---
 
@@ -228,6 +260,11 @@ POST /api/v1/enrichment/smart
 
 - **[Data Jobs — Complete Guide](../data-jobs/guide.md)** - For orchestrated workflows
 - **[Common Documentation](../common/README.md)** - Shared concepts, architecture, and utilities
+- **[Data Quality](../common/data-quality.md)** - Validate enrichment output
+- **[Data Lineage](../common/data-lineage.md)** - Track enrichment provenance
+- **[Data Transformation](../common/data-transformation.md)** - Post-enrichment processing
+- **[GenAI Bridge](../common/genai-bridge.md)** - AI agent integration
+- **[Per-Provider Resilience](../common/resiliency.md#per-provider-resilience)** - Provider-specific resilience patterns
 
 ---
 

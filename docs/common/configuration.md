@@ -27,7 +27,10 @@ firefly:
     eda:                   # Event-Driven Architecture settings
     cqrs:                  # CQRS pattern settings
     orchestration:         # Job orchestration settings
-    orchestration:         # Orchestration engine settings
+    enrichment:            # Data enrichment settings
+      providers:           # Per-provider resilience overrides
+    quality:               # Data quality framework settings
+    lineage:               # Data lineage tracking settings
   stepevents:              # Step event bridge settings
   eda:                     # fireflyframework-eda configuration
 ```
@@ -271,6 +274,110 @@ firefly:
 
 ---
 
+## Data Enrichment
+
+### Basic Enrichment Configuration
+
+```yaml
+firefly:
+  data:
+    enrichment:
+      enabled: true
+      cache-enabled: true
+      cache-ttl: 300         # Cache TTL in seconds
+```
+
+### Per-Provider Resilience
+
+Override global resilience settings for specific providers:
+
+```yaml
+firefly:
+  data:
+    enrichment:
+      providers:
+        equifax:
+          circuit-breaker-enabled: true
+          circuit-breaker-failure-rate-threshold: 30.0
+          circuit-breaker-wait-duration-in-open-state: 30s
+          retry-enabled: true
+          retry-max-attempts: 5
+          retry-wait-duration: 2s
+          rate-limiter-enabled: true
+          rate-limiter-limit-for-period: 50
+          rate-limiter-limit-refresh-period: 1s
+          bulkhead-enabled: true
+          bulkhead-max-concurrent-calls: 10
+          timeout-duration: 15s
+        moodys:
+          circuit-breaker-enabled: true
+          circuit-breaker-failure-rate-threshold: 60.0
+          retry-enabled: true
+          retry-max-attempts: 2
+          timeout-duration: 30s
+```
+
+#### Per-Provider Property Reference
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `circuit-breaker-enabled` | boolean | `true` | Enable circuit breaker for this provider |
+| `circuit-breaker-failure-rate-threshold` | float | `50.0` | Failure rate to trip circuit |
+| `circuit-breaker-wait-duration-in-open-state` | duration | `60s` | Wait before half-open |
+| `retry-enabled` | boolean | `true` | Enable retry for this provider |
+| `retry-max-attempts` | int | `3` | Max retry attempts |
+| `retry-wait-duration` | duration | `5s` | Wait between retries |
+| `rate-limiter-enabled` | boolean | `false` | Enable rate limiting |
+| `rate-limiter-limit-for-period` | int | `100` | Requests per period |
+| `rate-limiter-limit-refresh-period` | duration | `1s` | Rate limit refresh period |
+| `bulkhead-enabled` | boolean | `false` | Enable bulkhead isolation |
+| `bulkhead-max-concurrent-calls` | int | `25` | Max concurrent calls |
+| `timeout-duration` | duration | `30s` | Operation timeout |
+
+---
+
+## Data Quality
+
+### Quality Framework Configuration
+
+```yaml
+firefly:
+  data:
+    quality:
+      enabled: true          # Enable data quality framework (default: true)
+```
+
+### Property Reference
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `enabled` | boolean | `true` | Enable data quality auto-configuration |
+
+When enabled, `DataQualityEngine` is created as a bean and auto-discovers all `DataQualityRule<?>` beans in the Spring context.
+
+---
+
+## Data Lineage
+
+### Lineage Tracking Configuration
+
+```yaml
+firefly:
+  data:
+    lineage:
+      enabled: false         # Enable lineage tracking (default: false)
+```
+
+### Property Reference
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `enabled` | boolean | `false` | Enable lineage tracking auto-configuration |
+
+When enabled, an `InMemoryLineageTracker` bean is created. For production, provide your own `LineageTracker` implementation backed by a persistent store.
+
+---
+
 ## Step Events
 
 ### Basic Configuration
@@ -337,6 +444,10 @@ firefly:
       job-events-topic: dev-job-events
     orchestration:
       enabled: false                       # Disable orchestration in dev
+    quality:
+      enabled: true
+    lineage:
+      enabled: false               # Disable lineage in dev
 
   eda:
     publishers:
@@ -386,6 +497,18 @@ firefly:
         max-concurrent-dag-runs: 20
     orchestration:
       enabled: true
+    quality:
+      enabled: true
+    lineage:
+      enabled: true
+    enrichment:
+      providers:
+        equifax:
+          circuit-breaker-failure-rate-threshold: 30.0
+          retry-max-attempts: 5
+          rate-limiter-enabled: true
+          rate-limiter-limit-for-period: 50
+          timeout-duration: 15s
 
   stepevents:
     enabled: true
