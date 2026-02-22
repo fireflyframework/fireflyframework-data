@@ -383,6 +383,32 @@ public @interface EnricherMetadata {
     boolean enabled() default true;
 
     /**
+     * The cost per call for this enricher in the specified currency.
+     *
+     * <p>This is used for cost tracking and reporting. The cost is tracked
+     * per call by the {@link org.fireflyframework.data.cost.EnrichmentCostTracker}.</p>
+     *
+     * <p><b>Examples:</b></p>
+     * <ul>
+     *   <li>{@code 0.0} - Free tier or internal provider</li>
+     *   <li>{@code 0.05} - $0.05 per call</li>
+     *   <li>{@code 1.50} - $1.50 per call (premium provider)</li>
+     * </ul>
+     *
+     * @return the cost per call (default: 0.0)
+     */
+    double costPerCall() default 0.0;
+
+    /**
+     * The currency for the cost per call.
+     *
+     * <p>Uses ISO 4217 currency codes (e.g., "USD", "EUR", "GBP").</p>
+     *
+     * @return the currency code (default: "USD")
+     */
+    String costCurrency() default "USD";
+
+    /**
      * The Spring bean name for this enricher.
      *
      * <p>If not specified, Spring will generate a default bean name based on the class name.</p>
