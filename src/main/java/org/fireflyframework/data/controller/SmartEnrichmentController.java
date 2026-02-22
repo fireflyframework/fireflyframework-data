@@ -16,11 +16,13 @@
 
 package org.fireflyframework.data.controller;
 
+import org.fireflyframework.data.cache.EnrichmentCacheService;
 import org.fireflyframework.data.model.EnrichmentApiRequest;
 import org.fireflyframework.data.model.EnrichmentApiResponse;
 import org.fireflyframework.data.model.EnrichmentRequest;
 import org.fireflyframework.data.model.EnrichmentResponse;
 import org.fireflyframework.data.model.EnrichmentStrategy;
+import org.fireflyframework.data.model.PreviewResponse;
 import org.fireflyframework.data.service.DataEnricher;
 import org.fireflyframework.data.service.DataEnricherRegistry;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +35,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
@@ -40,6 +45,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -116,17 +122,85 @@ import java.util.stream.Collectors;
 public class SmartEnrichmentController {
 
     private final DataEnricherRegistry enricherRegistry;
+    private final EnrichmentCacheService cacheService;
 
-    public SmartEnrichmentController(DataEnricherRegistry enricherRegistry) {
+    public SmartEnrichmentController(DataEnricherRegistry enricherRegistry,
+                                     EnrichmentCacheService cacheService) {
         this.enricherRegistry = enricherRegistry;
+        this.cacheService = cacheService;
+    }
+
+    /**
+     * Preview endpoint that shows which provider would be selected without executing.
+     *
+     * <p>Returns metadata about the enricher that would handle the request,
+     * including provider name, version, priority, caching status, and tags.</p>
+     *
+     * @param apiRequest the enrichment request to preview
+     * @return preview response with provider metadata, or 404 if no enricher found
+     */
+    @PostMapping("/smart/preview")
+    @Operation(
+        summary = "Preview enrichment configuration without executing",
+        description = "Returns which provider would be selected, whether caching is active, and provider metadata"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Preview generated successfully",
+            content = @Content(schema = @Schema(implementation = PreviewResponse.class))
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "No enricher found for the specified type and tenant"
+        )
+    })
+    public Mono<ResponseEntity<PreviewResponse>> previewEnrichment(
+            @Parameter(description = "Enrichment request to preview", required = true)
+            @RequestBody EnrichmentApiRequest apiRequest) {
+
+        log.info("Received preview request - type: {}, tenantId: {}",
+                apiRequest.getType(), apiRequest.getTenantId());
+
+        return Mono.fromCallable(() -> {
+            DataEnricher<?, ?, ?> enricher = enricherRegistry.getEnricherForTypeAndTenant(
+                    apiRequest.getType(),
+                    apiRequest.getTenantId()
+            ).orElse(null);
+
+            if (enricher == null) {
+                log.warn("No enricher found for preview - type: {}, tenantId: {}",
+                        apiRequest.getType(), apiRequest.getTenantId());
+                return ResponseEntity.notFound().<PreviewResponse>build();
+            }
+
+            boolean cacheActive = cacheService != null && cacheService.isCacheEnabled();
+
+            PreviewResponse preview = PreviewResponse.builder()
+                    .providerName(enricher.getProviderName())
+                    .enrichmentType(apiRequest.getType())
+                    .providerVersion(enricher.getEnricherVersion())
+                    .priority(enricher.getPriority())
+                    .cached(cacheActive)
+                    .tenantId(apiRequest.getTenantId())
+                    .autoSelected(true)
+                    .description(enricher.getEnricherDescription())
+                    .tags(enricher.getTags())
+                    .build();
+
+            log.info("Preview generated - provider: {}, priority: {}, cached: {}",
+                    preview.getProviderName(), preview.getPriority(), preview.isCached());
+
+            return ResponseEntity.ok(preview);
+        });
     }
 
     /**
      * Smart enrichment endpoint that automatically selects the best enricher.
-     * 
+     *
      * <p>This endpoint simplifies enrichment requests by automatically selecting
      * the highest-priority enricher that matches the requested type and tenant.</p>
-     * 
+     *
      * @param request the enrichment request
      * @return the enrichment response
      */
@@ -373,6 +447,94 @@ public class SmartEnrichmentController {
                             });
                 })
                 .doOnComplete(() -> log.info("Batch enrichment completed for {} total requests", requests.size()));
+    }
+
+    /**
+     * SSE streaming endpoint that processes multiple enrichment requests and streams
+     * results as Server-Sent Events as each completes.
+     *
+     * <p>Unlike the batch endpoint which returns all results at once, this endpoint
+     * streams each result individually, allowing clients to process results incrementally.
+     * Each event includes an index-based ID correlating to the original request position.</p>
+     *
+     * <p><b>Event Types:</b></p>
+     * <ul>
+     *   <li><b>enrichment-result</b> - Successful enrichment result</li>
+     *   <li><b>enrichment-error</b> - Failed enrichment (no enricher found or execution error)</li>
+     *   <li><b>complete</b> - Final event indicating all requests have been processed</li>
+     * </ul>
+     *
+     * @param apiRequests list of enrichment requests to process
+     * @return flux of ServerSentEvents containing enrichment results
+     */
+    @PostMapping(value = "/smart/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @Operation(
+        summary = "Stream batch enrichment results via SSE",
+        description = "Processes multiple enrichment requests and streams results as Server-Sent Events " +
+                     "as each completes. Each event includes the request index as its ID for correlation."
+    )
+    public Flux<ServerSentEvent<EnrichmentApiResponse>> streamEnrichment(
+            @RequestBody List<EnrichmentApiRequest> apiRequests) {
+
+        log.info("Starting SSE stream enrichment for {} requests", apiRequests.size());
+
+        return Flux.fromIterable(apiRequests)
+                .index()
+                .flatMap(indexed -> {
+                    long index = indexed.getT1();
+                    EnrichmentApiRequest apiRequest = indexed.getT2();
+
+                    String type = apiRequest.getType();
+                    UUID tenantId = apiRequest.getTenantId();
+
+                    Optional<DataEnricher<?, ?, ?>> enricherOpt = tenantId != null
+                            ? enricherRegistry.getEnricherForTypeAndTenant(type, tenantId)
+                            : enricherRegistry.getEnricherForType(type);
+
+                    if (enricherOpt.isEmpty()) {
+                        EnrichmentApiResponse errorResponse = EnrichmentApiResponse.builder()
+                                .success(false)
+                                .message("No enricher found for type: " + type)
+                                .type(type)
+                                .build();
+                        return Mono.just(ServerSentEvent.<EnrichmentApiResponse>builder()
+                                .id(String.valueOf(index))
+                                .event("enrichment-error")
+                                .data(errorResponse)
+                                .build());
+                    }
+
+                    DataEnricher<?, ?, ?> enricher = enricherOpt.get();
+                    EnrichmentRequest request = convertToDomainRequest(apiRequest);
+
+                    return enricher.enrich(request)
+                            .map(response -> {
+                                EnrichmentApiResponse apiResponse = convertToApiResponse(response, enricher);
+                                return ServerSentEvent.<EnrichmentApiResponse>builder()
+                                        .id(String.valueOf(index))
+                                        .event("enrichment-result")
+                                        .data(apiResponse)
+                                        .build();
+                            })
+                            .onErrorResume(error -> {
+                                log.error("SSE stream enrichment failed for index {} (type: {}): {}",
+                                        index, type, error.getMessage());
+                                EnrichmentApiResponse errorResponse = EnrichmentApiResponse.builder()
+                                        .success(false)
+                                        .message("Enrichment failed: " + error.getMessage())
+                                        .type(type)
+                                        .build();
+                                return Mono.just(ServerSentEvent.<EnrichmentApiResponse>builder()
+                                        .id(String.valueOf(index))
+                                        .event("enrichment-error")
+                                        .data(errorResponse)
+                                        .build());
+                            });
+                }, 10)
+                .concatWith(Flux.just(ServerSentEvent.<EnrichmentApiResponse>builder()
+                        .event("complete")
+                        .comment("All enrichments processed")
+                        .build()));
     }
 }
 
