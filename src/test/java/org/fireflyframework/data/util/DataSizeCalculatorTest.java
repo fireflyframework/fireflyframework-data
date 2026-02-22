@@ -19,6 +19,7 @@ package org.fireflyframework.data.util;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -112,10 +113,27 @@ class DataSizeCalculatorTest {
     void shouldFormatBytesCorrectly() {
         // When & Then
         assertThat(DataSizeCalculator.formatSize(500)).isEqualTo("500 B");
-        assertThat(DataSizeCalculator.formatSize(1024)).isEqualTo("1,0 KB");
-        assertThat(DataSizeCalculator.formatSize(1536)).isEqualTo("1,5 KB");
-        assertThat(DataSizeCalculator.formatSize(1048576)).isEqualTo("1,0 MB");
-        assertThat(DataSizeCalculator.formatSize(1073741824)).isEqualTo("1,0 GB");
+        assertThat(DataSizeCalculator.formatSize(1024)).isEqualTo("1.0 KB");
+        assertThat(DataSizeCalculator.formatSize(1536)).isEqualTo("1.5 KB");
+        assertThat(DataSizeCalculator.formatSize(1048576)).isEqualTo("1.0 MB");
+        assertThat(DataSizeCalculator.formatSize(1073741824)).isEqualTo("1.0 GB");
+    }
+
+    @Test
+    void shouldUseDotDecimalSeparatorRegardlessOfDefaultLocale() {
+        // Given - save and change default locale to one that uses comma
+        Locale originalLocale = Locale.getDefault();
+        Locale.setDefault(Locale.of("es", "ES"));
+
+        try {
+            // When
+            String formatted = DataSizeCalculator.formatSize(1536);
+
+            // Then - should always use dot separator, never comma
+            assertThat(formatted).isEqualTo("1.5 KB");
+        } finally {
+            Locale.setDefault(originalLocale);
+        }
     }
 
     @Test

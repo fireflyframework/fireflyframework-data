@@ -1661,6 +1661,170 @@ if (tooLarge) {
 
 ---
 
+## Enrichment API Extensions
+
+### Preview Endpoint
+
+```java
+POST /api/v1/enrichment/smart/preview
+```
+
+Preview which enricher would handle a request without executing it.
+
+**Request Body:** Same as `POST /api/v1/enrichment/smart`
+
+**Response:**
+```json
+{
+  "providerName": "Equifax",
+  "enrichmentType": "credit-report",
+  "cached": false,
+  "priority": 100,
+  "supportedStrategies": ["ENHANCE", "MERGE", "REPLACE", "RAW"],
+  "estimatedCost": 0.50,
+  "costCurrency": "USD"
+}
+```
+
+### SSE Streaming Endpoint
+
+```java
+POST /api/v1/enrichment/smart/stream
+Content-Type: application/json
+Accept: text/event-stream
+```
+
+Stream batch enrichment results via Server-Sent Events.
+
+**Request Body:** Array of enrichment requests
+```json
+[
+  {"type": "credit-report", "params": {"companyId": "123"}},
+  {"type": "company-profile", "params": {"companyId": "123"}}
+]
+```
+
+**Response:** SSE stream
+```
+id: 0
+event: enrichment-result
+data: {"success": true, "enrichedData": {...}}
+
+id: 1
+event: enrichment-result
+data: {"success": true, "enrichedData": {...}}
+
+event: complete
+```
+
+### Cost Tracking Endpoint
+
+```java
+GET /api/v1/enrichment/costs
+GET /api/v1/enrichment/costs?tenantId={tenantId}
+```
+
+Returns per-provider enrichment cost report.
+
+**Response:**
+```json
+{
+  "totalCalls": 1500,
+  "totalCost": 750.00,
+  "currency": "USD",
+  "providers": {
+    "equifax": {"calls": 1000, "costPerCall": 0.50, "totalCost": 500.00},
+    "moodys": {"calls": 500, "costPerCall": 0.50, "totalCost": 250.00}
+  }
+}
+```
+
+### Error Handling
+
+The `DataExceptionHandler` (`@RestControllerAdvice`) provides structured error responses:
+
+**EnrichmentValidationException → HTTP 400:**
+```json
+{
+  "status": 400,
+  "error": "Validation Failed",
+  "message": "Enrichment request validation failed",
+  "errors": ["Required parameter 'companyId' is missing"],
+  "timestamp": "2026-02-22T20:00:00Z"
+}
+```
+
+---
+
+## Data Quality API
+
+### DataQualityEngine
+
+```java
+// Evaluate with default strategy (COLLECT_ALL)
+Mono<QualityReport> report = qualityEngine.evaluate(data);
+
+// Evaluate with specific strategy
+Mono<QualityReport> report = qualityEngine.evaluate(data, QualityStrategy.FAIL_FAST);
+```
+
+### QualityReport
+
+```java
+QualityReport report = ...;
+report.isPassed();              // true if no CRITICAL failures
+report.getTotalRules();         // number of rules evaluated
+report.getFailedRules();        // number of failures
+report.getFailures();           // list of failed QualityResults
+report.getBySeverity(CRITICAL); // filter by severity
+```
+
+---
+
+## Data Lineage API
+
+### LineageTracker
+
+```java
+// Record lineage
+lineageTracker.record(LineageRecord.builder()
+    .recordId(UUID.randomUUID().toString())
+    .entityId("customer-123")
+    .sourceSystem("equifax")
+    .operation("ENRICHMENT")
+    .operatorId("EquifaxCreditEnricher")
+    .timestamp(Instant.now())
+    .build()
+).subscribe();
+
+// Query lineage
+Flux<LineageRecord> history = lineageTracker.getLineage("customer-123");
+Flux<LineageRecord> byOp = lineageTracker.getLineageByOperator("EquifaxCreditEnricher");
+```
+
+---
+
+## Data Transformation API
+
+### TransformationChain
+
+```java
+// Build a transformation chain
+TransformationChain<Map<String, Object>, Map<String, Object>> chain =
+    TransformationChain.of(
+        new FieldMappingTransformer(Map.of("first_name", "firstName", "last_name", "lastName"))
+    ).then(
+        new ComputedFieldTransformer(Map.of(
+            "fullName", data -> data.get("firstName") + " " + data.get("lastName")
+        ))
+    );
+
+// Execute
+Mono<Map<String, Object>> result = chain.execute(inputData);
+```
+
+---
+
 ## See Also
 
 - [Getting Started](getting-started.md) - Setup guide

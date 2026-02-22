@@ -209,15 +209,14 @@ public class EnrichmentCacheService {
         }
 
         String pattern = keyGenerator.generateTenantPattern(tenantId);
-        log.info("Evicting all cache entries for tenant: {} (pattern: {})", tenantId, pattern);
-        
-        // Note: Pattern-based eviction depends on cache implementation
-        // For now, we'll clear the entire cache if tenant eviction is requested
-        // In production, you'd want to implement pattern-based eviction in CacheAdapter
-        return cacheAdapter.clear()
-            .doOnSuccess(v -> log.info("Cleared cache for tenant: {}", tenantId))
+        String prefix = pattern.endsWith("*") ? pattern.substring(0, pattern.length() - 1) : pattern;
+        log.info("Evicting cache entries for tenant: {} (prefix: {})", tenantId, prefix);
+
+        return cacheAdapter.evictByPrefix(prefix)
+            .doOnNext(count -> log.info("Evicted {} cache entries for tenant: {}", count, tenantId))
+            .then()
             .onErrorResume(e -> {
-                log.warn("Error clearing cache for tenant {}: {}", tenantId, e.getMessage());
+                log.warn("Error evicting cache for tenant {}: {}", tenantId, e.getMessage());
                 return Mono.empty();
             });
     }
@@ -235,14 +234,16 @@ public class EnrichmentCacheService {
         }
 
         String pattern = keyGenerator.generateProviderPattern(tenantId, providerName);
-        log.info("Evicting all cache entries for provider: {} in tenant: {} (pattern: {})", 
-                 providerName, tenantId, pattern);
-        
-        // Similar to evictTenant, this would ideally use pattern-based eviction
-        return cacheAdapter.clear()
-            .doOnSuccess(v -> log.info("Cleared cache for provider: {} in tenant: {}", providerName, tenantId))
+        String prefix = pattern.endsWith("*") ? pattern.substring(0, pattern.length() - 1) : pattern;
+        log.info("Evicting cache entries for provider: {} in tenant: {} (prefix: {})",
+                 providerName, tenantId, prefix);
+
+        return cacheAdapter.evictByPrefix(prefix)
+            .doOnNext(count -> log.info("Evicted {} cache entries for provider: {} in tenant: {}",
+                    count, providerName, tenantId))
+            .then()
             .onErrorResume(e -> {
-                log.warn("Error clearing cache for provider {} in tenant {}: {}", 
+                log.warn("Error evicting cache for provider {} in tenant {}: {}",
                          providerName, tenantId, e.getMessage());
                 return Mono.empty();
             });

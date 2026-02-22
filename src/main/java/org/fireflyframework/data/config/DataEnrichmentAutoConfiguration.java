@@ -23,6 +23,8 @@ import org.fireflyframework.cache.core.CacheAdapter;
 import org.fireflyframework.data.cache.EnrichmentCacheKeyGenerator;
 import org.fireflyframework.data.cache.EnrichmentCacheService;
 import org.fireflyframework.data.cache.OperationCacheService;
+import org.fireflyframework.data.cost.EnrichmentCostTracker;
+import org.fireflyframework.data.enrichment.FallbackEnrichmentExecutor;
 import org.fireflyframework.data.event.EnrichmentEventPublisher;
 import org.fireflyframework.data.event.JobEventPublisher;
 import org.fireflyframework.data.event.OperationEventPublisher;
@@ -33,6 +35,8 @@ import org.fireflyframework.data.observability.JobMetricsService;
 import org.fireflyframework.data.observability.JobTracingService;
 import org.fireflyframework.data.operation.schema.JsonSchemaGenerator;
 import org.fireflyframework.data.orchestration.port.JobOrchestrator;
+import org.fireflyframework.data.resiliency.ProviderResiliencyRegistry;
+import org.fireflyframework.data.resiliency.ResiliencyDecoratorService;
 import org.fireflyframework.data.service.DataEnricher;
 import org.fireflyframework.data.service.DataEnricherRegistry;
 import org.fireflyframework.data.service.DataJobDiscoveryService;
@@ -316,5 +320,50 @@ public class DataEnrichmentAutoConfiguration {
             JobOrchestrationProperties properties) {
         log.info("Creating JobOrchestratorHealthIndicator bean");
         return new JobOrchestratorHealthIndicator(orchestrator, properties);
+    }
+
+    /**
+     * Creates the fallback enrichment executor bean.
+     *
+     * <p>This executor supports automatic fallback chain execution when a primary
+     * enricher fails or returns empty results, as declared via {@code @EnricherFallback}.</p>
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public FallbackEnrichmentExecutor fallbackEnrichmentExecutor(DataEnricherRegistry registry) {
+        log.info("Creating FallbackEnrichmentExecutor bean");
+        return new FallbackEnrichmentExecutor(registry);
+    }
+
+    /**
+     * Creates the provider resiliency registry bean.
+     *
+     * <p>This registry manages per-provider Resilience4j instances, allowing each data
+     * provider to have independent circuit breaker, retry, rate limiter, bulkhead, and
+     * timeout configurations. Providers without explicit configuration fall back to the
+     * global {@link ResiliencyDecoratorService}.</p>
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public ProviderResiliencyRegistry providerResiliencyRegistry(
+            DataEnrichmentProperties properties,
+            ResiliencyDecoratorService defaultService) {
+        log.info("Creating ProviderResiliencyRegistry bean with {} provider configs",
+                properties.getProviders().size());
+        return new ProviderResiliencyRegistry(properties.getProviders(), defaultService);
+    }
+
+    /**
+     * Creates the enrichment cost tracker bean.
+     *
+     * <p>This tracker records call counts and costs per provider for enrichment
+     * operations. Provider costs can be registered dynamically at runtime via
+     * {@code EnrichmentCostTracker#registerProvider}.</p>
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public EnrichmentCostTracker enrichmentCostTracker() {
+        log.info("Creating EnrichmentCostTracker bean");
+        return new EnrichmentCostTracker();
     }
 }

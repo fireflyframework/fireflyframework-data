@@ -12,6 +12,7 @@ This document describes the resiliency patterns implemented in fireflyframework-
 - [Configuration](#configuration)
 - [Usage Examples](#usage-examples)
 - [Monitoring](#monitoring)
+- [Per-Provider Resilience](#per-provider-resilience)
 
 ## Overview
 
@@ -478,4 +479,70 @@ resilience4j_bulkhead_available_concurrent_calls{name="jobOrchestrator"}
 6. **Combine with Timeouts**: Set appropriate timeouts on orchestrator operations
 7. **Log Pattern Events**: Enable logging for circuit breaker and retry events
 8. **Consider Fallbacks**: Implement fallback logic for critical operations
+
+## Per-Provider Resilience
+
+### Overview
+
+In addition to the global resilience configuration, you can configure **independent resilience patterns per enrichment provider**. This allows fine-tuning circuit breaker thresholds, retry counts, and rate limits based on each provider's SLA and reliability characteristics.
+
+### How It Works
+
+The `ProviderResiliencyRegistry` creates named Resilience4j instances per configured provider. When a provider-specific configuration exists, it takes precedence over the global `ResiliencyDecoratorService`. Unconfigured providers fall back to the global settings.
+
+### Configuration
+
+```yaml
+firefly:
+  data:
+    enrichment:
+      providers:
+        equifax:
+          circuit-breaker-enabled: true
+          circuit-breaker-failure-rate-threshold: 30.0
+          circuit-breaker-wait-duration-in-open-state: 30s
+          retry-enabled: true
+          retry-max-attempts: 5
+          retry-wait-duration: 2s
+          rate-limiter-enabled: true
+          rate-limiter-limit-for-period: 50
+          timeout-duration: 15s
+        moodys:
+          circuit-breaker-failure-rate-threshold: 60.0
+          retry-max-attempts: 2
+          timeout-duration: 30s
+```
+
+### Decoration Order
+
+Provider-specific resilience patterns are applied in the following order:
+
+1. **Bulkhead** (outermost) — limits concurrent calls
+2. **Rate Limiter** — controls request rate
+3. **Circuit Breaker** — prevents calls to failing provider
+4. **Retry** — retries on transient failures
+5. **Timeout** (innermost) — enforces maximum wait time
+
+### Programmatic Usage
+
+```java
+@Service
+public class SmartEnrichmentService {
+
+    private final ProviderResiliencyRegistry providerResiliency;
+
+    public Mono<EnrichmentResponse> enrichWithProviderResilience(
+            String providerName, Mono<EnrichmentResponse> operation) {
+        // Applies provider-specific resilience or falls back to global
+        return providerResiliency.decorate(providerName, operation);
+    }
+}
+```
+
+### When to Use Per-Provider Resilience
+
+- **Different SLAs**: Provider A responds in <500ms, Provider B in <5s — different timeout settings
+- **Different reliability**: Provider A has 99.9% uptime, Provider B has 95% — different circuit breaker thresholds
+- **Rate-limited APIs**: Provider A allows 100 req/s, Provider B allows 10 req/s — different rate limits
+- **Cost-sensitive providers**: Expensive providers need tighter bulkhead limits
 

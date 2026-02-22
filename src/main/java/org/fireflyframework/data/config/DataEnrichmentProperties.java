@@ -17,8 +17,12 @@
 package org.fireflyframework.data.config;
 
 import lombok.Data;
+import org.fireflyframework.data.resiliency.ProviderResiliencyConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Configuration properties for data enrichment.
@@ -110,6 +114,15 @@ public class DataEnrichmentProperties {
      * If false, individual failures are returned in the batch response.</p>
      */
     private boolean batchFailFast = false;
+
+    /**
+     * Per-provider resilience configurations, keyed by provider name.
+     *
+     * <p>Providers listed here receive independent Resilience4j instances
+     * (circuit breaker, retry, rate limiter, bulkhead, timeout). Providers
+     * not listed fall back to the global resiliency defaults.</p>
+     */
+    private Map<String, ProviderResiliencyConfig> providers = new HashMap<>();
 
     /**
      * Configuration for provider custom operations.

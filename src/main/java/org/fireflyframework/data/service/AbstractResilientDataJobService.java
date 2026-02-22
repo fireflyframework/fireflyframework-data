@@ -172,6 +172,21 @@ public abstract class AbstractResilientDataJobService implements DataJobService 
         // Wrap with resiliency patterns
         Mono<JobStageResponse> resilientOperation = resiliencyService.decorate(tracedOperation);
 
+        // Apply timeout if configured
+        Duration timeout = getJobTimeout(stage);
+        if (timeout != null && !timeout.isZero()) {
+            resilientOperation = resilientOperation
+                    .timeout(timeout)
+                    .onErrorResume(java.util.concurrent.TimeoutException.class, e -> {
+                        Duration duration = Duration.between(startTime, Instant.now());
+                        log.warn("Job stage {} timed out after {} - executionId: {}", stage, timeout, executionId);
+                        metricsService.recordJobError(stage, "TimeoutException");
+                        metricsService.incrementJobStageCounter(stage, "timeout");
+                        return Mono.just(JobStageResponse.failure(stage, executionId,
+                                "Job stage " + stage + " timed out after " + timeout));
+                    });
+        }
+
         // Add metrics, logging, and persistence
         return resilientOperation
                 .doOnSubscribe(subscription -> {
@@ -370,6 +385,18 @@ public abstract class AbstractResilientDataJobService implements DataJobService 
      */
     protected String getJobDescription() {
         return "Data processing job";
+    }
+
+    /**
+     * Gets the timeout for a specific job stage.
+     * Subclasses can override to provide per-stage or global timeouts.
+     * Returns null by default (no timeout) for backward compatibility.
+     *
+     * @param stage the job stage
+     * @return the timeout duration, or null for no timeout
+     */
+    protected Duration getJobTimeout(JobStage stage) {
+        return null;
     }
 
     /**
