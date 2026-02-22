@@ -2,7 +2,7 @@
 
 This section contains documentation that applies to **both Data Jobs and Data Enrichers** - shared concepts, architecture, configuration, and utilities.
 
-## 📖 What's in Common Documentation?
+## What's in Common Documentation?
 
 These topics are relevant whether you're building data jobs, data enrichers, or both:
 - Architecture and design patterns
@@ -15,7 +15,7 @@ These topics are relevant whether you're building data jobs, data enrichers, or 
 
 ---
 
-## 📚 Core Documentation
+## Core Documentation
 
 ### Architecture & Design
 
@@ -28,12 +28,12 @@ These topics are relevant whether you're building data jobs, data enrichers, or 
 - Component interactions
 
 **Topics covered**:
-- ✅ Dependency inversion and interface segregation
-- ✅ Pluggable adapters for different platforms
-- ✅ Reactive programming with Project Reactor
-- ✅ Event-driven architecture integration
-- ✅ CQRS pattern support
-- ✅ SAGA pattern for distributed transactions
+- Dependency inversion and interface segregation
+- Pluggable adapters for different platforms
+- Reactive programming with Project Reactor
+- Event-driven architecture integration
+- CQRS pattern support
+- SAGA pattern for distributed transactions
 
 ---
 
@@ -51,12 +51,12 @@ These topics are relevant whether you're building data jobs, data enrichers, or 
 - Resiliency configuration
 
 **Topics covered**:
-- ✅ YAML configuration examples
-- ✅ Property reference
-- ✅ Environment profiles
-- ✅ Feature toggles
-- ✅ Connection configuration
-- ✅ Timeout and retry settings
+- YAML configuration examples
+- Property reference
+- Environment profiles
+- Feature toggles
+- Connection configuration
+- Timeout and retry settings
 
 ---
 
@@ -70,12 +70,12 @@ These topics are relevant whether you're building data jobs, data enrichers, or 
 - Integration with monitoring systems (Prometheus, Grafana, Jaeger, Grafana Tempo)
 
 **Topics covered**:
-- ✅ Automatic tracing for all operations
-- ✅ Custom trace spans
-- ✅ Metrics for jobs and enrichments
-- ✅ Health check endpoints
-- ✅ Performance monitoring
-- ✅ Error tracking
+- Automatic tracing for all operations
+- Custom trace spans
+- Metrics for jobs and enrichments
+- Health check endpoints
+- Performance monitoring
+- Error tracking
 
 ---
 
@@ -90,11 +90,11 @@ These topics are relevant whether you're building data jobs, data enrichers, or 
 - Fallback strategies
 
 **Topics covered**:
-- ✅ Resilience4j integration
-- ✅ Automatic resiliency for jobs and enrichments
-- ✅ Configuration examples
-- ✅ Custom resiliency strategies
-- ✅ Monitoring resiliency metrics
+- Resilience4j integration
+- Automatic resiliency for jobs and enrichments
+- Configuration examples
+- Custom resiliency strategies
+- Monitoring resiliency metrics
 
 ---
 
@@ -108,11 +108,11 @@ These topics are relevant whether you're building data jobs, data enrichers, or 
 - Best practices
 
 **Topics covered**:
-- ✅ Automatic logging for all operations
-- ✅ Request/response logging
-- ✅ Error logging with stack traces
-- ✅ Performance logging
-- ✅ Integration with log aggregation systems (ELK, Splunk)
+- Automatic logging for all operations
+- Request/response logging
+- Error logging with stack traces
+- Performance logging
+- Integration with log aggregation systems (ELK, Splunk)
 
 ---
 
@@ -127,12 +127,12 @@ These topics are relevant whether you're building data jobs, data enrichers, or 
 - Best practices
 
 **Topics covered**:
-- ✅ Testing data jobs
-- ✅ Testing data enrichers
-- ✅ Testing custom operations
-- ✅ Testing with MockWebServer
-- ✅ Testing resiliency patterns
-- ✅ Test coverage strategies
+- Testing data jobs
+- Testing data enrichers
+- Testing custom operations
+- Testing with MockWebServer
+- Testing resiliency patterns
+- Test coverage strategies
 
 ---
 
@@ -147,11 +147,11 @@ These topics are relevant whether you're building data jobs, data enrichers, or 
 - Best practices
 
 **Topics covered**:
-- ✅ Setting up MapStruct
-- ✅ Creating mappers
-- ✅ Field mapping
-- ✅ Custom converters
-- ✅ Testing mappers
+- Setting up MapStruct
+- Creating mappers
+- Field mapping
+- Custom converters
+- Testing mappers
 
 ---
 
@@ -164,11 +164,11 @@ These topics are relevant whether you're building data jobs, data enrichers, or 
 - OpenAPI/Swagger documentation
 
 **Topics covered**:
-- ✅ Data job endpoints
-- ✅ Data enrichment endpoints
-- ✅ Discovery endpoints
-- ✅ Health check endpoints
-- ✅ Custom operation endpoints
+- Data job endpoints
+- Data enrichment endpoints
+- Discovery endpoints
+- Health check endpoints
+- Custom operation endpoints
 
 ---
 
@@ -183,14 +183,14 @@ These topics are relevant whether you're building data jobs, data enrichers, or 
 - Advanced scenarios
 
 **Topics covered**:
-- ✅ Complete working examples
-- ✅ Best practices
-- ✅ Common patterns
-- ✅ Integration scenarios
+- Complete working examples
+- Best practices
+- Common patterns
+- Integration scenarios
 
 ---
 
-## 🎯 Common Tasks
+## Common Tasks
 
 ### I want to...
 
@@ -220,14 +220,14 @@ These topics are relevant whether you're building data jobs, data enrichers, or 
 
 ---
 
-## 🔗 Related Documentation
+## Related Documentation
 
 - **[Data Jobs — Complete Guide](../data-jobs/guide.md)** - For orchestrated workflows
 - **[Data Enrichers](../data-enrichers/README.md)** - For third-party provider integration
 
 ---
 
-## 📋 Document Index
+## Document Index
 
 ### Architecture & Design
 - [architecture.md](architecture.md) - Hexagonal architecture and design patterns

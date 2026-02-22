@@ -2,7 +2,7 @@
 
 Welcome to the **fireflyframework-starter-data** starter documentation! This starter provides a standardized, production-ready foundation for building data processing microservices in the Firefly ecosystem.
 
-## 📖 What is fireflyframework-starter-data?
+## What is fireflyframework-starter-data?
 
 `fireflyframework-starter-data` is an opinionated Spring Boot starter that provides two main capabilities:
 
@@ -50,7 +50,7 @@ Python bridge package for `fireflyframework-genai` with tools, pipeline steps, a
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Choose Your Path
 
@@ -68,14 +68,14 @@ Python bridge package for `fireflyframework-genai` with tools, pipeline steps, a
 
 ---
 
-## 📚 Documentation Structure
+## Documentation Structure
 
 ### [Data Jobs — Complete Guide](data-jobs/guide.md)
 Documentation for building orchestrated workflows (async and sync) in one place.
 
 ### [Data Enrichers](data-enrichers/README.md)
 Documentation for integrating with third-party providers:
-- **[Step-by-Step Guide](data-enrichers/enricher-microservice-guide.md)** - ⭐ Complete guide from scratch
+- **[Step-by-Step Guide](data-enrichers/enricher-microservice-guide.md)** - Complete guide from scratch
 - **[Data Enrichment Reference](data-enrichers/data-enrichment.md)** - Complete reference guide
 
 ### [Common Documentation](common/README.md)
@@ -90,16 +90,15 @@ Shared concepts, architecture, and utilities:
 - **[API Reference](common/api-reference.md)** - Complete API documentation
 - **[Examples](common/examples.md)** - Real-world usage patterns
 
-### [New Features](common/)
-Advanced capabilities added in this release:
+### [Advanced Capabilities](common/)
 - **[Data Quality Framework](common/data-quality.md)** - Rule-based validation and quality gates
 - **[Data Lineage Tracking](common/data-lineage.md)** - Provenance and audit trail
 - **[Data Transformation](common/data-transformation.md)** - Post-enrichment transformation pipelines
-- **[GenAI Bridge](common/genai-bridge.md)** - Native integration with fireflyframework-genai
+- **[GenAI Bridge](common/genai-bridge.md)** - Integration with fireflyframework-genai
 
 ---
 
-## 🎯 Common Tasks
+## Common Tasks
 
 ### Getting Started
 - **[Install the library](#installation)** - Add to your project
@@ -118,7 +117,7 @@ Advanced capabilities added in this release:
 
 ---
 
-## 📦 Installation
+## Installation
 
 ### Maven
 
@@ -152,52 +151,52 @@ Add the following to your `pom.xml`:
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 ### Automatic Observability
-- ✅ **Distributed Tracing** - Micrometer integration with OpenTelemetry
-- ✅ **Metrics Collection** - Automatic metrics for all operations
-- ✅ **Health Checks** - Ready-to-use health check endpoints
-- ✅ **Comprehensive Logging** - Structured JSON logging
+- **Distributed Tracing** - Micrometer integration with OpenTelemetry
+- **Metrics Collection** - Automatic metrics for all operations
+- **Health Checks** - Ready-to-use health check endpoints
+- **Comprehensive Logging** - Structured JSON logging
 
 ### Automatic Resiliency
-- ✅ **Circuit Breaker** - Prevent cascading failures
-- ✅ **Retry Logic** - Exponential backoff with jitter
-- ✅ **Rate Limiting** - Protect external APIs
-- ✅ **Bulkhead Isolation** - Isolate failures
+- **Circuit Breaker** - Prevent cascading failures
+- **Retry Logic** - Exponential backoff with jitter
+- **Rate Limiting** - Protect external APIs
+- **Bulkhead Isolation** - Isolate failures
 
 ### Event-Driven Architecture
-- ✅ **Automatic Event Publishing** - Job and enrichment lifecycle events
-- ✅ **CQRS Integration** - Command/Query separation
-- ✅ **SAGA Support** - Distributed transaction patterns
+- **Automatic Event Publishing** - Job and enrichment lifecycle events
+- **CQRS Integration** - Command/Query separation
+- **SAGA Support** - Distributed transaction patterns
 
-### Data Quality & Lineage
-- ✅ **Quality Gates** - Rule-based validation with fail-fast and collect-all strategies
-- ✅ **Data Lineage** - Track provenance across enrichments and transformations
-- ✅ **Transformation Pipelines** - Composable field mapping and computed fields
+### Data Quality and Lineage
+- **Quality Gates** - Rule-based validation with fail-fast and collect-all strategies
+- **Data Lineage** - Track provenance across enrichments and transformations
+- **Transformation Pipelines** - Composable field mapping and computed fields
 
-### Enrichment Enhancements
-- ✅ **Fallback Chains** - Automatic provider failover with `@EnricherFallback`
-- ✅ **Per-Provider Resilience** - Independent circuit breaker, retry, rate limiter per provider
-- ✅ **Cost Tracking** - Per-provider call counting and cost reports
-- ✅ **Preview/Dry-Run** - Preview enrichment routing without execution
-- ✅ **SSE Streaming** - Real-time batch enrichment results via Server-Sent Events
-- ✅ **Job Timeouts** - Configurable per-stage timeout enforcement
+### Enrichment Capabilities
+- **Fallback Chains** - Automatic provider failover with `@EnricherFallback`
+- **Per-Provider Resilience** - Independent circuit breaker, retry, rate limiter per provider
+- **Cost Tracking** - Per-provider call counting and cost reports
+- **Preview/Dry-Run** - Preview enrichment routing without execution
+- **SSE Streaming** - Real-time batch enrichment results via Server-Sent Events
+- **Job Timeouts** - Configurable per-stage timeout enforcement
 
 ### GenAI Integration
-- ✅ **Native Bridge** - Python package for `fireflyframework-genai` integration
-- ✅ **AI Agent Tools** - Data enrichment and job management as agent tools
-- ✅ **Pipeline Steps** - Enrichment and quality gate steps for GenAI pipelines
+- **Native Bridge** - Python package for `fireflyframework-genai` integration
+- **AI Agent Tools** - Data enrichment and job management as agent tools
+- **Pipeline Steps** - Enrichment and quality gate steps for GenAI pipelines
 
 ### Developer Experience
-- ✅ **Abstract Base Classes** - Minimal boilerplate code
-- ✅ **Type-Safe APIs** - Compile-time safety
-- ✅ **Reactive Programming** - Non-blocking operations with Project Reactor
-- ✅ **Comprehensive Testing** - Test utilities and examples
+- **Abstract Base Classes** - Minimal boilerplate code
+- **Type-Safe APIs** - Compile-time safety
+- **Reactive Programming** - Non-blocking operations with Project Reactor
+- **Comprehensive Testing** - Test utilities and examples
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 The library follows **Hexagonal Architecture** (Ports and Adapters):
 
@@ -235,7 +234,7 @@ The library follows **Hexagonal Architecture** (Ports and Adapters):
 
 ---
 
-## 📖 Documentation Index
+## Documentation Index
 
 ### By Feature
 - **[Data Jobs — Complete Guide](data-jobs/guide.md)** - Orchestrated workflows
@@ -251,7 +250,7 @@ The library follows **Hexagonal Architecture** (Ports and Adapters):
 
 ---
 
-## 🤝 Support
+## Support
 
 For questions, issues, or contributions:
 - Check the [Examples](common/examples.md) for common patterns
@@ -260,7 +259,7 @@ For questions, issues, or contributions:
 
 ---
 
-## 📝 License
+## License
 
 Copyright © 2024-2026 Firefly Software Solutions Inc. All rights reserved.
 

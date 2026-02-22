@@ -20,11 +20,11 @@ The `fireflyframework-starter-data` starter uses **MapStruct** for transforming 
 
 ### Why MapStruct?
 
-✅ **Type-safe** - Compile-time validation  
-✅ **Performance** - No reflection, pure Java code  
-✅ **Maintainable** - Clear mapping definitions  
-✅ **Flexible** - Custom transformations supported  
-✅ **IDE-friendly** - Auto-completion and refactoring  
+**Type-safe** - Compile-time validation  
+**Performance** - No reflection, pure Java code  
+**Maintainable** - Clear mapping definitions  
+**Flexible** - Custom transformations supported  
+**IDE-friendly** - Auto-completion and refactoring  
 
 ### Transformation Flow
 
@@ -452,7 +452,7 @@ public interface ProductDataMapper extends JobResultMapper<Map<String, Object>, 
 
 ### 1. Use Explicit Mappings
 
-❌ **Bad** - Relies on field name matching:
+**Bad** - Relies on field name matching:
 ```java
 @Mapper(componentModel = "spring")
 public interface BadMapper extends JobResultMapper<Map<String, Object>, CustomerDTO> {
@@ -460,7 +460,7 @@ public interface BadMapper extends JobResultMapper<Map<String, Object>, Customer
 }
 ```
 
-✅ **Good** - Explicit field mappings:
+**Good** - Explicit field mappings:
 ```java
 @Mapper(componentModel = "spring")
 public interface GoodMapper extends JobResultMapper<Map<String, Object>, CustomerDTO> {

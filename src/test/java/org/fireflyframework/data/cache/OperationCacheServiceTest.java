@@ -31,6 +31,7 @@ import reactor.test.StepVerifier;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -178,7 +179,10 @@ class OperationCacheServiceTest {
     @Test
     void evictByTenant_shouldEvictByPrefix() {
         // Given
-        when(cacheAdapter.evictByPrefix("operation:tenant-1:")).thenReturn(Mono.just(5L));
+        when(cacheAdapter.<String>keys()).thenReturn(Mono.just(Set.of(
+                "operation:tenant-1:ProviderA:op1:hash1", "operation:tenant-1:ProviderB:op2:hash2",
+                "operation:tenant-2:ProviderA:op1:hash3")));
+        when(cacheAdapter.evict(anyString())).thenReturn(Mono.just(true));
 
         // When
         Mono<Void> result = cacheService.evictByTenant("tenant-1");
@@ -187,7 +191,7 @@ class OperationCacheServiceTest {
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(cacheAdapter).evictByPrefix("operation:tenant-1:");
+        verify(cacheAdapter).keys();
         verify(cacheAdapter, never()).clear();
     }
 
@@ -204,14 +208,14 @@ class OperationCacheServiceTest {
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(cacheAdapter, never()).evictByPrefix(anyString());
+        verify(cacheAdapter, never()).keys();
         verify(cacheAdapter, never()).clear();
     }
 
     @Test
     void evictByTenant_shouldHandleError() {
         // Given
-        when(cacheAdapter.evictByPrefix("operation:tenant-1:"))
+        when(cacheAdapter.<String>keys())
                 .thenReturn(Mono.error(new RuntimeException("Cache error")));
 
         // When
@@ -227,7 +231,10 @@ class OperationCacheServiceTest {
     @Test
     void evictByProvider_shouldEvictByPrefix() {
         // Given
-        when(cacheAdapter.evictByPrefix("operation:tenant-1:ProviderA:")).thenReturn(Mono.just(3L));
+        when(cacheAdapter.<String>keys()).thenReturn(Mono.just(Set.of(
+                "operation:tenant-1:ProviderA:op1:hash1", "operation:tenant-1:ProviderA:op2:hash2",
+                "operation:tenant-1:ProviderB:op1:hash3")));
+        when(cacheAdapter.evict(anyString())).thenReturn(Mono.just(true));
 
         // When
         Mono<Void> result = cacheService.evictByProvider("tenant-1", "ProviderA");
@@ -236,7 +243,7 @@ class OperationCacheServiceTest {
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(cacheAdapter).evictByPrefix("operation:tenant-1:ProviderA:");
+        verify(cacheAdapter).keys();
         verify(cacheAdapter, never()).clear();
     }
 
@@ -253,14 +260,14 @@ class OperationCacheServiceTest {
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(cacheAdapter, never()).evictByPrefix(anyString());
+        verify(cacheAdapter, never()).keys();
         verify(cacheAdapter, never()).clear();
     }
 
     @Test
     void evictByProvider_shouldHandleError() {
         // Given
-        when(cacheAdapter.evictByPrefix("operation:tenant-1:ProviderA:"))
+        when(cacheAdapter.<String>keys())
                 .thenReturn(Mono.error(new RuntimeException("Cache error")));
 
         // When
@@ -276,8 +283,11 @@ class OperationCacheServiceTest {
     @Test
     void evictByOperation_shouldEvictByPrefix() {
         // Given
-        when(cacheAdapter.evictByPrefix("operation:tenant-1:ProviderA:search-company:"))
-                .thenReturn(Mono.just(2L));
+        when(cacheAdapter.<String>keys()).thenReturn(Mono.just(Set.of(
+                "operation:tenant-1:ProviderA:search-company:hash1",
+                "operation:tenant-1:ProviderA:search-company:hash2",
+                "operation:tenant-1:ProviderA:other-op:hash3")));
+        when(cacheAdapter.evict(anyString())).thenReturn(Mono.just(true));
 
         // When
         Mono<Void> result = cacheService.evictByOperation("tenant-1", "ProviderA", "search-company");
@@ -286,7 +296,7 @@ class OperationCacheServiceTest {
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(cacheAdapter).evictByPrefix("operation:tenant-1:ProviderA:search-company:");
+        verify(cacheAdapter).keys();
         verify(cacheAdapter, never()).clear();
     }
 
@@ -303,14 +313,14 @@ class OperationCacheServiceTest {
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(cacheAdapter, never()).evictByPrefix(anyString());
+        verify(cacheAdapter, never()).keys();
         verify(cacheAdapter, never()).clear();
     }
 
     @Test
     void evictByOperation_shouldHandleError() {
         // Given
-        when(cacheAdapter.evictByPrefix("operation:tenant-1:ProviderA:search-company:"))
+        when(cacheAdapter.<String>keys())
                 .thenReturn(Mono.error(new RuntimeException("Cache error")));
 
         // When

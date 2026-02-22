@@ -21,6 +21,7 @@ import org.fireflyframework.data.config.DataEnrichmentProperties;
 import org.fireflyframework.data.model.EnrichmentRequest;
 import org.fireflyframework.data.model.EnrichmentResponse;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
@@ -212,7 +213,7 @@ public class EnrichmentCacheService {
         String prefix = pattern.endsWith("*") ? pattern.substring(0, pattern.length() - 1) : pattern;
         log.info("Evicting cache entries for tenant: {} (prefix: {})", tenantId, prefix);
 
-        return cacheAdapter.evictByPrefix(prefix)
+        return evictByPrefix(prefix)
             .doOnNext(count -> log.info("Evicted {} cache entries for tenant: {}", count, tenantId))
             .then()
             .onErrorResume(e -> {
@@ -238,7 +239,7 @@ public class EnrichmentCacheService {
         log.info("Evicting cache entries for provider: {} in tenant: {} (prefix: {})",
                  providerName, tenantId, prefix);
 
-        return cacheAdapter.evictByPrefix(prefix)
+        return evictByPrefix(prefix)
             .doOnNext(count -> log.info("Evicted {} cache entries for provider: {} in tenant: {}",
                     count, providerName, tenantId))
             .then()
@@ -285,6 +286,22 @@ public class EnrichmentCacheService {
      */
     public Duration getDefaultTtl() {
         return defaultTtl;
+    }
+
+    private Mono<Long> evictByPrefix(String keyPrefix) {
+        return cacheAdapter.<String>keys()
+            .flatMap(allKeys -> {
+                var matching = allKeys.stream()
+                    .filter(k -> k.toString().startsWith(keyPrefix))
+                    .toList();
+                if (matching.isEmpty()) {
+                    return Mono.just(0L);
+                }
+                return Flux.fromIterable(matching)
+                    .flatMap(cacheAdapter::evict)
+                    .filter(Boolean::booleanValue)
+                    .count();
+            });
     }
 }
 

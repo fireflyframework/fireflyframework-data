@@ -125,20 +125,20 @@ public class OrderImportJob {
 ```
 
 **Problems**:
-- ❌ Every team reinvents the wheel
-- ❌ Inconsistent observability across jobs
-- ❌ Different error handling strategies
-- ❌ Hard to maintain and evolve
+- Every team reinvents the wheel
+- Inconsistent observability across jobs
+- Different error handling strategies
+- Hard to maintain and evolve
 
 #### 2. Missing Cross-Cutting Concerns
 
 Teams often forget important features:
 
-- ❌ No distributed tracing
-- ❌ No circuit breaker
-- ❌ No audit trail
-- ❌ No standardized error handling
-- ❌ No event publishing
+- No distributed tracing
+- No circuit breaker
+- No audit trail
+- No standardized error handling
+- No event publishing
 
 #### 3. No Standardization
 
@@ -159,9 +159,9 @@ POST /run-analytics
 ```
 
 **Problems**:
-- ❌ Every job has a different API
-- ❌ Clients need to know each job's specific interface
-- ❌ No common patterns for status checking, cancellation, etc.
+- Every job has a different API
+- Clients need to know each job's specific interface
+- No common patterns for status checking, cancellation, etc.
 
 ### The Solution: Template Method Pattern + Hexagonal Architecture
 
@@ -206,10 +206,10 @@ Template (AbstractResilientDataJobService):
 ```
 
 **Benefits**:
-- ✅ **Consistency**: All jobs follow the same pattern
-- ✅ **DRY**: Cross-cutting concerns implemented once
-- ✅ **Focus**: You only write business logic
-- ✅ **Evolution**: Framework improvements benefit all jobs
+- **Consistency**: All jobs follow the same pattern
+- **DRY**: Cross-cutting concerns implemented once
+- **Focus**: You only write business logic
+- **Evolution**: Framework improvements benefit all jobs
 
 #### 2. Hexagonal Architecture (Ports and Adapters)
 
@@ -267,9 +267,9 @@ The **Hexagonal Architecture** (aka Ports and Adapters) separates core business 
 ```
 
 **Benefits**:
-- ✅ **Testability**: Core logic independent of external systems
-- ✅ **Flexibility**: Swap orchestrators without changing core logic
-- ✅ **Maintainability**: Clear separation of concerns
+- **Testability**: Core logic independent of external systems
+- **Flexibility**: Swap orchestrators without changing core logic
+- **Maintainability**: Clear separation of concerns
 
 ---
 
@@ -309,13 +309,13 @@ The architecture implements **three design patterns** working together:
 #### Cross-Cutting Concerns (Automatically Applied)
 
 All jobs automatically get:
-- ✅ **Distributed Tracing** - Micrometer Observation integration
-- ✅ **Metrics** - Success/failure counts, execution time, error types
-- ✅ **Resiliency** - Circuit breaker, retry, rate limiting, bulkhead, timeout
-- ✅ **Audit Trail** - Persistence of job execution history
-- ✅ **Result Persistence** - Storage of job results
-- ✅ **Event Publishing** - Job lifecycle events (started, completed, failed)
-- ✅ **Structured Logging** - Comprehensive logging with context
+- **Distributed Tracing** - Micrometer Observation integration
+- **Metrics** - Success/failure counts, execution time, error types
+- **Resiliency** - Circuit breaker, retry, rate limiting, bulkhead, timeout
+- **Audit Trail** - Persistence of job execution history
+- **Result Persistence** - Storage of job results
+- **Event Publishing** - Job lifecycle events (started, completed, failed)
+- **Structured Logging** - Comprehensive logging with context
 
 ### Key Classes
 
@@ -693,11 +693,11 @@ Add `fireflyframework-starter-data` to your `pom.xml`:
 Create a service that extends `AbstractResilientDataJobService` and implements the business logic for each stage:
 
 **Key Points**:
-- ✅ Extend `AbstractResilientDataJobService` (gets all cross-cutting concerns automatically)
-- ✅ Inject required dependencies via constructor
-- ✅ Override only the `doXxx` methods you need (Template Method Pattern)
-- ✅ Return `Mono<JobStageResponse>` from each method
-- ✅ Use `@Service` annotation for Spring auto-discovery
+- Extend `AbstractResilientDataJobService` (gets all cross-cutting concerns automatically)
+- Inject required dependencies via constructor
+- Override only the `doXxx` methods you need (Template Method Pattern)
+- Return `Mono<JobStageResponse>` from each method
+- Use `@Service` annotation for Spring auto-discovery
 
 ```java
 package com.example.jobs;
@@ -790,11 +790,11 @@ public class CustomerImportJobService extends AbstractResilientDataJobService {
 Create a controller that extends `AbstractDataJobController` to expose REST endpoints:
 
 **Key Points**:
-- ✅ Extend `AbstractDataJobController` (gets all REST endpoints automatically)
-- ✅ Inject your `DataJobService` implementation
-- ✅ Add `@RestController` annotation
-- ✅ Add `@RequestMapping` to define base path
-- ✅ Add `@Tag` for Swagger documentation
+- Extend `AbstractDataJobController` (gets all REST endpoints automatically)
+- Inject your `DataJobService` implementation
+- Add `@RestController` annotation
+- Add `@RequestMapping` to define base path
+- Add `@Tag` for Swagger documentation
 
 ```java
 package com.example.jobs;
@@ -886,12 +886,12 @@ curl http://localhost:8080/api/v1/customer-import/exec-abc-123/result
 ```
 
 That's it! You now have a fully functional async data job with:
-- ✅ Standardized REST API
-- ✅ Distributed tracing
-- ✅ Metrics collection
-- ✅ Circuit breaker and retry
-- ✅ Audit trail
-- ✅ Event publishing
+- Standardized REST API
+- Distributed tracing
+- Metrics collection
+- Circuit breaker and retry
+- Audit trail
+- Event publishing
 
 That’s it. You now have standardized endpoints (see API Endpoints below).
 
@@ -904,27 +904,27 @@ That’s it. You now have standardized endpoints (see API Endpoints below).
 Use synchronous jobs for quick, single-step operations (< ~30 seconds) that return results immediately.
 
 **When to use sync jobs**:
-- ✅ Quick validations (< 30 seconds)
-- ✅ Simple transformations
-- ✅ Real-time lookups
-- ✅ Immediate response required
+- Quick validations (< 30 seconds)
+- Simple transformations
+- Real-time lookups
+- Immediate response required
 
 **When NOT to use sync jobs**:
-- ❌ Long-running operations (> 30 seconds)
-- ❌ Operations requiring polling
-- ❌ Multi-stage workflows
-- ❌ External orchestration needed
+- Long-running operations (> 30 seconds)
+- Operations requiring polling
+- Multi-stage workflows
+- External orchestration needed
 
 ### Step 1: Implement Your Sync Job Service
 
 Create a service that extends `AbstractResilientSyncDataJobService` and implements the `doExecute` method:
 
 **Key Points**:
-- ✅ Extend `AbstractResilientSyncDataJobService` (gets all cross-cutting concerns automatically)
-- ✅ Inject required dependencies via constructor
-- ✅ Override only `doExecute` method (Template Method Pattern)
-- ✅ Return `Mono<JobStageResponse>` with immediate results
-- ✅ Use `@Service` annotation for Spring auto-discovery
+- Extend `AbstractResilientSyncDataJobService` (gets all cross-cutting concerns automatically)
+- Inject required dependencies via constructor
+- Override only `doExecute` method (Template Method Pattern)
+- Return `Mono<JobStageResponse>` with immediate results
+- Use `@Service` annotation for Spring auto-discovery
 
 ```java
 package com.example.jobs;
@@ -974,11 +974,11 @@ public class CustomerValidationJobService extends AbstractResilientSyncDataJobSe
 Create a controller that extends `AbstractSyncDataJobController` to expose the execute endpoint:
 
 **Key Points**:
-- ✅ Extend `AbstractSyncDataJobController` (gets execute endpoint automatically)
-- ✅ Inject your `SyncDataJobService` implementation
-- ✅ Add `@RestController` annotation
-- ✅ Add `@RequestMapping` to define base path
-- ✅ Add `@Tag` for Swagger documentation
+- Extend `AbstractSyncDataJobController` (gets execute endpoint automatically)
+- Inject your `SyncDataJobService` implementation
+- Add `@RestController` annotation
+- Add `@RequestMapping` to define base path
+- Add `@Tag` for Swagger documentation
 
 ```java
 package com.example.jobs;
@@ -1026,12 +1026,12 @@ curl -X POST http://localhost:8080/api/v1/customer-validation/execute \
 ```
 
 That's it! You now have a fully functional sync data job with:
-- ✅ Immediate response
-- ✅ Distributed tracing
-- ✅ Metrics collection
-- ✅ Circuit breaker and retry
-- ✅ Audit trail
-- ✅ Event publishing
+- Immediate response
+- Distributed tracing
+- Metrics collection
+- Circuit breaker and retry
+- Audit trail
+- Event publishing
 
 ---
 
@@ -1100,19 +1100,19 @@ When you extend `AbstractSyncDataJobController`, you automatically get this endp
 ### Cross-Cutting Concerns
 
 All endpoints automatically include:
-- ✅ **Distributed Tracing** - Every request gets a trace span
-- ✅ **Metrics** - Success/failure counts, execution time
-- ✅ **Structured Logging** - Request/response logging with context
-- ✅ **Error Handling** - Standardized error responses
-- ✅ **OpenAPI Documentation** - Swagger UI integration
+- **Distributed Tracing** - Every request gets a trace span
+- **Metrics** - Success/failure counts, execution time
+- **Structured Logging** - Request/response logging with context
+- **Error Handling** - Standardized error responses
+- **OpenAPI Documentation** - Swagger UI integration
 
 ### Important Notes
 
 **Controllers are NOT auto-registered**:
-- ❌ Unlike Data Enrichers, Data Job controllers are NOT automatically discovered
-- ✅ You MUST create concrete controller classes in your microservice
-- ✅ You MUST annotate them with `@RestController` and `@RequestMapping`
-- ✅ This is by design - jobs are domain-specific and should be explicitly defined
+- Unlike Data Enrichers, Data Job controllers are NOT automatically discovered
+- You MUST create concrete controller classes in your microservice
+- You MUST annotate them with `@RestController` and `@RequestMapping`
+- This is by design - jobs are domain-specific and should be explicitly defined
 
 **Why not auto-register?**
 - Data Jobs are domain-specific workflows (CustomerImport, OrderProcessing, etc.)
@@ -1470,10 +1470,10 @@ firefly:
 
 It is common to create several job services and controllers in a single microservice. This approach:
 
-- ✅ **Reuses Infrastructure**: All jobs share the same cross-cutting concerns
-- ✅ **Clear Responsibilities**: Each job has its own service and controller
-- ✅ **Simplified Deployment**: One microservice, multiple jobs
-- ✅ **Consistent Patterns**: All jobs follow the same structure
+- **Reuses Infrastructure**: All jobs share the same cross-cutting concerns
+- **Clear Responsibilities**: Each job has its own service and controller
+- **Simplified Deployment**: One microservice, multiple jobs
+- **Consistent Patterns**: All jobs follow the same structure
 
 ### Example Structure
 
@@ -1560,12 +1560,12 @@ public class CustomerValidationJobController extends AbstractSyncDataJobControll
 ### Benefits
 
 All jobs automatically get:
-- ✅ Distributed tracing
-- ✅ Metrics collection  
-- ✅ Circuit breaker and retry
-- ✅ Audit trail
-- ✅ Event publishing
-- ✅ Standardized error handling
+- Distributed tracing
+- Metrics collection  
+- Circuit breaker and retry
+- Audit trail
+- Event publishing
+- Standardized error handling
 
 **No code duplication** - all cross-cutting concerns are handled by the framework!
 
@@ -1713,10 +1713,10 @@ Response
 #### 1. Distributed Tracing
 
 **Micrometer Observation** integration provides:
-- ✅ Trace ID and Span ID for every request
-- ✅ Parent-child span relationships
-- ✅ Trace context propagation across services
-- ✅ Integration with Jaeger, Grafana Tempo, and other OpenTelemetry-compatible systems
+- Trace ID and Span ID for every request
+- Parent-child span relationships
+- Trace context propagation across services
+- Integration with Jaeger, Grafana Tempo, and other OpenTelemetry-compatible systems
 
 **Example Trace**:
 ```
@@ -1743,11 +1743,11 @@ firefly:
 #### 2. Metrics
 
 **Micrometer Metrics** provides:
-- ✅ Success/failure counts per job type
-- ✅ Execution time histograms
-- ✅ Error type distribution
-- ✅ Circuit breaker state
-- ✅ Retry attempts
+- Success/failure counts per job type
+- Execution time histograms
+- Error type distribution
+- Circuit breaker state
+- Retry attempts
 
 **Example Metrics**:
 ```
@@ -1770,10 +1770,10 @@ firefly:
 #### 3. Structured Logging
 
 **SLF4J** with structured context:
-- ✅ Request/response logging
-- ✅ Execution ID in every log
-- ✅ Job type and stage
-- ✅ Error details with context
+- Request/response logging
+- Execution ID in every log
+- Job type and stage
+- Error details with context
 
 **Example Logs**:
 ```

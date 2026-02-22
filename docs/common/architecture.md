@@ -57,11 +57,11 @@ The `fireflyframework-starter-data` starter is built on **Hexagonal Architecture
 │  │                                                    │         │
 │  │              PORT INTERFACES                       │         │
 │  │  ┌─────────────────────────────────────────────┐   │         │
-│  │  │ DataJobController (REST API Port)           │   │         │
-│  │  │ JobOrchestrator (Orchestration Port)        │   │         │
-│  │  │ EventPublisher (EDA Port)                   │   │         │
-│  │  │ OrchestrationEventPublisher (Orchestration Port)│  │         │
-│  │  └─────────────────────────────────────────────┘   │         │
+│  │  │ DataJobController (REST API Port)            │   │         │
+│  │  │ JobOrchestrator (Orchestration Port)         │   │         │
+│  │  │ EventPublisher (EDA Port)                    │   │         │
+│  │  │ OrchestrationEventPublisher (Orch. Port)     │   │         │
+│  │  └──────────────────────────────────────────────┘   │         │
 │  │                                                    │         │
 │  │              DOMAIN CORE                           │         │
 │  │  ┌─────────────────────────────────────────────┐   │         │
@@ -73,7 +73,7 @@ The `fireflyframework-starter-data` starter is built on **Hexagonal Architecture
 │  │                                                    │         │
 │  └────────────────────────────────────────────────────┘         │
 │                                                                 │
-│                    fireflyframework-starter-data                              │
+│                    fireflyframework-starter-data                   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -348,7 +348,7 @@ cost/
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                  fireflyframework-starter-data                        │
+│              fireflyframework-starter-data               │
 │                                                         │
 │  ┌────────────────────────────────────────────┐         │
 │  │  Job Events                                │         │
@@ -358,7 +358,7 @@ cost/
 │  └────────────┬───────────────────────────────┘         │
 │               │                                         │
 │  ┌────────────▼───────────────────────────────┐         │
-│  │  Orchestration EventGateway               │         │
+│  │  Orchestration EventGateway                │         │
 │  │  - Orchestration step events               │         │
 │  │  - Metadata enrichment                     │         │
 │  └────────────┬───────────────────────────────┘         │
@@ -366,7 +366,7 @@ cost/
                 │
                 ▼
 ┌─────────────────────────────────────────────────────────┐
-│              fireflyframework-eda                             │
+│              fireflyframework-eda                        │
 │                                                         │
 │  ┌────────────────────────────────────────────┐         │
 │  │  EventPublisher                            │         │
@@ -395,7 +395,7 @@ cost/
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│              fireflyframework-starter-data                            │
+│              fireflyframework-starter-data               │
 │                                                         │
 │  ┌────────────────────────────────────────────┐         │
 │  │  DataJobService                            │         │
@@ -406,7 +406,7 @@ cost/
                 │
                 ▼
 ┌─────────────────────────────────────────────────────────┐
-│              fireflyframework-cqrs                            │
+│              fireflyframework-cqrs                       │
 │                                                         │
 │  ┌────────────────────┐  ┌────────────────────┐         │
 │  │  CommandHandler    │  │  QueryHandler      │         │
@@ -676,18 +676,18 @@ Client          Controller      Service         Orchestrator    Mapper          
 
 The `fireflyframework-starter-data` architecture provides:
 
-✅ **Clean Architecture** - Hexagonal design with clear boundaries
-✅ **Flexibility** - Pluggable adapters for different platforms
-✅ **Dual Job Types** - Asynchronous (multi-stage) and Synchronous (single-stage) jobs
-✅ **Testability** - Dependency inversion enables easy mocking
-✅ **Scalability** - Reactive programming and CQRS support
-✅ **Observability** - Built-in event publishing and tracing
-✅ **Reliability** - SAGA pattern for distributed transactions
-✅ **Data Quality** - Rule-based validation with configurable strategies
-✅ **Data Lineage** - Provenance tracking for all data operations
-✅ **Transformation Pipelines** - Composable post-enrichment processing
-✅ **Fallback Chains** - Automatic provider failover
-✅ **GenAI Bridge** - Native integration with fireflyframework-genai
+- **Clean Architecture** - Hexagonal design with clear boundaries
+- **Flexibility** - Pluggable adapters for different platforms
+- **Dual Job Types** - Asynchronous (multi-stage) and Synchronous (single-stage) jobs
+- **Testability** - Dependency inversion enables easy mocking
+- **Scalability** - Reactive programming and CQRS support
+- **Observability** - Built-in event publishing and tracing
+- **Reliability** - SAGA pattern for distributed transactions
+- **Data Quality** - Rule-based validation with configurable strategies
+- **Data Lineage** - Provenance tracking for all data operations
+- **Transformation Pipelines** - Composable post-enrichment processing
+- **Fallback Chains** - Automatic provider failover
+- **GenAI Bridge** - Integration with fireflyframework-genai
 
 For more details, see:
 - [Job Lifecycle](../data-jobs/guide.md#job-lifecycle-async) - Detailed stage documentation for async jobs

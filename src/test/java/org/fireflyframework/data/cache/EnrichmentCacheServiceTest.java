@@ -32,6 +32,7 @@ import reactor.test.StepVerifier;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -215,7 +216,9 @@ class EnrichmentCacheServiceTest {
     void evictTenant_shouldEvictByPrefixForTenant() {
         // Given
         when(keyGenerator.generateTenantPattern("tenant-abc")).thenReturn("enrichment:tenant-abc:*");
-        when(cacheAdapter.evictByPrefix("enrichment:tenant-abc:")).thenReturn(Mono.just(3L));
+        when(cacheAdapter.<String>keys()).thenReturn(Mono.just(Set.of(
+                "enrichment:tenant-abc:key1", "enrichment:tenant-abc:key2", "enrichment:other:key3")));
+        when(cacheAdapter.evict(anyString())).thenReturn(Mono.just(true));
 
         // When
         Mono<Void> result = cacheService.evictTenant("tenant-abc");
@@ -225,7 +228,7 @@ class EnrichmentCacheServiceTest {
                 .verifyComplete();
 
         verify(keyGenerator).generateTenantPattern("tenant-abc");
-        verify(cacheAdapter).evictByPrefix("enrichment:tenant-abc:");
+        verify(cacheAdapter).keys();
         verify(cacheAdapter, never()).clear();
     }
 
@@ -234,7 +237,9 @@ class EnrichmentCacheServiceTest {
         // Given
         when(keyGenerator.generateProviderPattern("tenant-abc", "TestProvider"))
                 .thenReturn("enrichment:tenant-abc:TestProvider:*");
-        when(cacheAdapter.evictByPrefix("enrichment:tenant-abc:TestProvider:")).thenReturn(Mono.just(2L));
+        when(cacheAdapter.<String>keys()).thenReturn(Mono.just(Set.of(
+                "enrichment:tenant-abc:TestProvider:key1", "enrichment:tenant-abc:TestProvider:key2")));
+        when(cacheAdapter.evict(anyString())).thenReturn(Mono.just(true));
 
         // When
         Mono<Void> result = cacheService.evictProvider("tenant-abc", "TestProvider");
@@ -244,7 +249,7 @@ class EnrichmentCacheServiceTest {
                 .verifyComplete();
 
         verify(keyGenerator).generateProviderPattern("tenant-abc", "TestProvider");
-        verify(cacheAdapter).evictByPrefix("enrichment:tenant-abc:TestProvider:");
+        verify(cacheAdapter).keys();
         verify(cacheAdapter, never()).clear();
     }
 
@@ -252,7 +257,7 @@ class EnrichmentCacheServiceTest {
     void evictTenant_shouldHandleError() {
         // Given
         when(keyGenerator.generateTenantPattern("tenant-abc")).thenReturn("enrichment:tenant-abc:*");
-        when(cacheAdapter.evictByPrefix("enrichment:tenant-abc:"))
+        when(cacheAdapter.<String>keys())
                 .thenReturn(Mono.error(new RuntimeException("Cache error")));
 
         // When
@@ -268,7 +273,7 @@ class EnrichmentCacheServiceTest {
         // Given
         when(keyGenerator.generateProviderPattern("tenant-abc", "TestProvider"))
                 .thenReturn("enrichment:tenant-abc:TestProvider:*");
-        when(cacheAdapter.evictByPrefix("enrichment:tenant-abc:TestProvider:"))
+        when(cacheAdapter.<String>keys())
                 .thenReturn(Mono.error(new RuntimeException("Cache error")));
 
         // When
@@ -292,7 +297,7 @@ class EnrichmentCacheServiceTest {
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(cacheAdapter, never()).evictByPrefix(anyString());
+        verify(cacheAdapter, never()).keys();
         verify(cacheAdapter, never()).clear();
     }
 
@@ -309,7 +314,7 @@ class EnrichmentCacheServiceTest {
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(cacheAdapter, never()).evictByPrefix(anyString());
+        verify(cacheAdapter, never()).keys();
         verify(cacheAdapter, never()).clear();
     }
 

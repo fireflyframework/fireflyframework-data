@@ -61,7 +61,7 @@ For **fetching and integrating data** from third-party providers (credit bureaus
 
 ---
 
-> **💡 Looking for a complete step-by-step guide?**
+> **Looking for a complete step-by-step guide?**
 > - For **Data Jobs**: See [Data Jobs — Complete Guide](../data-jobs/guide.md)
 > - For **Data Enrichers**: See [Step-by-Step Guide: Data Enricher Microservice](../data-enrichers/enricher-microservice-guide.md) with multi-module Maven structure
 
@@ -405,7 +405,7 @@ public interface CustomerDataMapper extends JobResultMapper<Map<String, Object>,
 
 ### Step 5: Implement DataJobService
 
-> **💡 Recommended Approach**: Use `AbstractResilientDataJobService` for automatic observability, resiliency, and persistence features.
+> **Recommended Approach**: Use `AbstractResilientDataJobService` for automatic observability, resiliency, and persistence features.
 >
 > See [Multiple Jobs in One Service](../data-jobs/guide.md#multiple-jobs-in-one-service) for a complete example with multiple services and controllers.
 
@@ -636,7 +636,7 @@ public class CustomerDataJobService implements DataJobService {
 
 ### Step 5: Implement DataJobController
 
-> **💡 Recommended Approach**: Use `AbstractDataJobController` for automatic comprehensive logging.
+> **Recommended Approach**: Use `AbstractDataJobController` for automatic comprehensive logging.
 
 **Option A: Using AbstractDataJobController (Recommended)**
 
@@ -912,7 +912,7 @@ public class FinancialDataResponse {
 
 ### Step 3: Implement Data Enricher
 
-> **💡 Recommended Approach**: Use `DataEnricher` for automatic strategy application and 67% less code.
+> **Recommended Approach**: Use `DataEnricher` for automatic strategy application and 67% less code.
 
 ```java
 package com.example.myservice.enricher;
@@ -1009,13 +1009,13 @@ public class FinancialDataEnricher
 ```
 
 **What happens automatically:**
-- ✅ Distributed tracing with Micrometer
-- ✅ Metrics collection (execution time, success/failure rates, data sizes)
-- ✅ Circuit breaker, retry, rate limiting, and bulkhead patterns
-- ✅ Automatic enrichment strategy application (ENHANCE/MERGE/REPLACE/RAW)
-- ✅ Automatic response building with metadata and field counting
-- ✅ Event publishing for enrichment lifecycle events
-- ✅ Comprehensive logging for all enrichment phases
+- Distributed tracing with Micrometer
+- Metrics collection (execution time, success/failure rates, data sizes)
+- Circuit breaker, retry, rate limiting, and bulkhead patterns
+- Automatic enrichment strategy application (ENHANCE/MERGE/REPLACE/RAW)
+- Automatic response building with metadata and field counting
+- Event publishing for enrichment lifecycle events
+- Comprehensive logging for all enrichment phases
 
 ### Step 4: Add Provider-Specific Custom Operations (Optional but Recommended)
 
@@ -1101,12 +1101,12 @@ public class CreditBureauEnricher
 ```
 
 **What You Get Automatically:**
-- ✅ **REST Endpoints** - `POST /api/v1/enrichment/credit-bureau/operation/search-company`
-- ✅ **JSON Schema Generation** - Request/response schemas auto-generated from DTOs
-- ✅ **Type Safety** - Compile-time type checking
-- ✅ **Validation** - Automatic request validation
-- ✅ **Discovery** - `GET /api/v1/enrichment/credit-bureau/operations` lists all operations with schemas
-- ✅ **OpenAPI Docs** - Full Swagger documentation
+- **REST Endpoints** - `POST /api/v1/enrichment/credit-bureau/operation/search-company`
+- **JSON Schema Generation** - Request/response schemas auto-generated from DTOs
+- **Type Safety** - Compile-time type checking
+- **Validation** - Automatic request validation
+- **Discovery** - `GET /api/v1/enrichment/credit-bureau/operations` lists all operations with schemas
+- **OpenAPI Docs** - Full Swagger documentation
 
 **Typical Workflow:**
 ```bash
@@ -1131,7 +1131,7 @@ POST /api/v1/enrichment/credit-bureau/enrich
 
 ### Step 5: That's It! No Controller Needed
 
-> **✨ NEW SIMPLIFIED ARCHITECTURE**: Your enricher is automatically available through global endpoints.
+> Your enricher is automatically available through global endpoints via the simplified architecture.
 
 **Your enricher is now accessible via:**
 
@@ -1161,15 +1161,15 @@ GET /api/v1/enrichment/health?type=company-profile
 ```
 
 **What you get automatically:**
-- ✅ **Smart routing** - Automatic selection by type + tenant + priority
-- ✅ **Discovery** - List all available enrichers
-- ✅ **Health checks** - Global health endpoint
-- ✅ **Multi-tenancy** - Tenant-aware routing
-- ✅ **Comprehensive logging** - All requests/responses logged
-- ✅ **Observability** - Tracing, metrics automatically
-- ✅ **Resiliency** - Circuit breaker, retry automatically
+- **Smart routing** - Automatic selection by type + tenant + priority
+- **Discovery** - List all available enrichers
+- **Health checks** - Global health endpoint
+- **Multi-tenancy** - Tenant-aware routing
+- **Comprehensive logging** - All requests/responses logged
+- **Observability** - Tracing, metrics automatically
+- **Resiliency** - Circuit breaker, retry automatically
 
-> **📖 See [Simplified Architecture Guide](../data-enrichers/SIMPLIFIED-ARCHITECTURE.md)** for complete details.
+> **See [Simplified Architecture Guide](../data-enrichers/SIMPLIFIED-ARCHITECTURE.md)** for complete details.
 
 ---
 
@@ -1538,5 +1538,5 @@ Now that you have a basic implementation:
 
 ---
 
-**Congratulations!** 🎉 You've successfully set up a data processing microservice using `fireflyframework-starter-data`.
+You have successfully set up a data processing microservice using `fireflyframework-starter-data`.
 

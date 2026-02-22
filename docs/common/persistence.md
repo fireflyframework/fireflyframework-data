@@ -21,13 +21,13 @@ The library provides built-in support for persisting:
 
 Key features:
 
-- ✅ **Hexagonal Architecture** - Port/adapter pattern for flexible implementations
-- ✅ **Reactive** - Fully reactive with R2DBC support
-- ✅ **Multi-Database** - PostgreSQL, MySQL, H2, MongoDB, DynamoDB, Redis
-- ✅ **Automatic** - Integrated into AbstractResilientDataJobService
-- ✅ **Configurable** - Enable/disable features via properties
-- ✅ **Retention Policies** - Automatic cleanup of old data
-- ✅ **Security** - Sensitive data sanitization
+- **Hexagonal Architecture** - Port/adapter pattern for flexible implementations
+- **Reactive** - Fully reactive with R2DBC support
+- **Multi-Database** - PostgreSQL, MySQL, H2, MongoDB, DynamoDB, Redis
+- **Automatic** - Integrated into AbstractResilientDataJobService
+- **Configurable** - Enable/disable features via properties
+- **Retention Policies** - Automatic cleanup of old data
+- **Security** - Sensitive data sanitization
 
 ## Architecture
 
@@ -95,13 +95,13 @@ Every job operation is automatically audited with:
 
 #### Tracing Integration
 
-The library now includes **effective tracing context extraction** using `TracingContextExtractor`:
+The library provides **tracing context extraction** using `TracingContextExtractor`:
 
-- ✅ **Real Trace IDs** - Extracted from Micrometer Tracing (not generated timestamps)
-- ✅ **Real Span IDs** - Extracted from current observation span
-- ✅ **OpenTelemetry Support** - Full support for OpenTelemetry tracing backend
-- ✅ **Automatic Configuration** - Tracer is automatically injected via Spring Boot
-- ✅ **Distributed Tracing** - Full correlation with Jaeger, Grafana Tempo, and other OpenTelemetry-compatible systems
+- **Real Trace IDs** - Extracted from Micrometer Tracing (not generated timestamps)
+- **Real Span IDs** - Extracted from current observation span
+- **OpenTelemetry Support** - Full support for OpenTelemetry tracing backend
+- **Automatic Configuration** - Tracer is automatically injected via Spring Boot
+- **Distributed Tracing** - Full correlation with Jaeger, Grafana Tempo, and other OpenTelemetry-compatible systems
 
 **Example trace IDs:**
 ```
@@ -144,14 +144,14 @@ Job execution results include:
 
 #### Data Size Calculation
 
-The library now includes **effective data size calculation** using `DataSizeCalculator`:
+The library provides **data size calculation** using `DataSizeCalculator`:
 
-- ✅ **Precise Measurement** - Actual byte size via JSON serialization (not toString() estimation)
-- ✅ **UTF-8 Encoding** - Accurate byte count using UTF-8 encoding
-- ✅ **Combined Calculation** - Calculates total size of raw + transformed output
-- ✅ **Human-Readable Formatting** - Converts bytes to KB, MB, GB, etc.
-- ✅ **Size Validation** - Check if data exceeds size limits
-- ✅ **Automatic Integration** - Used automatically in `JobExecutionResultService`
+- **Precise Measurement** - Actual byte size via JSON serialization (not toString() estimation)
+- **UTF-8 Encoding** - Accurate byte count using UTF-8 encoding
+- **Combined Calculation** - Calculates total size of raw + transformed output
+- **Human-Readable Formatting** - Converts bytes to KB, MB, GB, etc.
+- **Size Validation** - Check if data exceeds size limits
+- **Automatic Integration** - Used automatically in `JobExecutionResultService`
 
 **Example usage:**
 ```java

@@ -7,7 +7,7 @@
 
 ---
 
-## 📖 What Are Data Enrichers?
+## What Are Data Enrichers?
 
 **Data Enrichers** are specialized microservices that integrate with third-party data providers (like Equifax, Moody's, Dun & Bradstreet). They serve two main purposes:
 
@@ -32,7 +32,7 @@
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Add Dependency
 
@@ -90,14 +90,14 @@ POST /api/v1/enrichment/smart
 
 ## Do I Need to Create Controllers?
 
-**NO!** This is important to understand:
+**No.** This is important to understand:
 
-### ❌ You DON'T Create
+### You DON'T Create
 - REST controllers
 - HTTP endpoints
 - Any `@RestController` classes
 
-### ✅ You ONLY Create
+### You ONLY Create
 - Enricher classes with `@EnricherMetadata`
 
 ### How It Works
@@ -129,9 +129,9 @@ When Spring Boot starts:
 
 ---
 
-## 📖 Complete Guide
+## Complete Guide
 
-**👉 [Read the Complete Guide](guide.md)**
+**[Read the Complete Guide](guide.md)**
 
 The complete guide covers everything you need to know:
 
@@ -158,70 +158,70 @@ The complete guide covers everything you need to know:
 
 ---
 
-## ✨ What You Get Automatically
+## What You Get Automatically
 
 When you add `fireflyframework-starter-data` and create enrichers with `@EnricherMetadata`, the starter automatically provides:
 
 ### Global REST Controllers (Created by Library)
 The library **automatically creates** these controllers - you don't need to create them:
 
-- ✅ **`SmartEnrichmentController`** - `POST /api/v1/enrichment/smart`
+- **`SmartEnrichmentController`** - `POST /api/v1/enrichment/smart`
   - Automatic routing by type + tenant + priority
   - No need to know which provider to call
 
-- ✅ **`EnrichmentDiscoveryController`** - `GET /api/v1/enrichment/providers`
+- **`EnrichmentDiscoveryController`** - `GET /api/v1/enrichment/providers`
   - Lists all enrichers in your microservice
   - Filterable by type and tenant
 
-- ✅ **`GlobalEnrichmentHealthController`** - `GET /api/v1/enrichment/health`
+- **`GlobalEnrichmentHealthController`** - `GET /api/v1/enrichment/health`
   - Health check for all enrichers
   - Filterable by type and tenant
 
-- ✅ **`SmartEnrichmentController`** - `POST /api/v1/enrichment/smart/preview`
+- **`SmartEnrichmentController`** - `POST /api/v1/enrichment/smart/preview`
   - Preview which enricher would handle a request without executing it
   - Returns provider name, priority, cached status
 
-- ✅ **`SmartEnrichmentController`** - `POST /api/v1/enrichment/smart/stream`
+- **`SmartEnrichmentController`** - `POST /api/v1/enrichment/smart/stream`
   - Stream batch enrichment results via Server-Sent Events
   - Real-time progress for multiple enrichment requests
 
-- ✅ **`EnrichmentCostController`** - `GET /api/v1/enrichment/costs`
+- **`EnrichmentCostController`** - `GET /api/v1/enrichment/costs`
   - View per-provider enrichment costs and call counts
 
-- ✅ **`DataExceptionHandler`** - Global error handling
+- **`DataExceptionHandler`** - Global error handling
   - Maps `EnrichmentValidationException` to HTTP 400 with detailed error body
 
 ### Enterprise Features (Built-in)
-- ✅ **Observability** - Distributed tracing, metrics, logging
-- ✅ **Resiliency** - Circuit breaker, retry, rate limiting, timeout
-- ✅ **Event Publishing** - Enrichment lifecycle events
-- ✅ **Caching** - Configurable caching layer
-- ✅ **Multi-Tenancy** - Native support for multiple tenants
-- ✅ **Priority-Based Selection** - Control which provider is used
-- ✅ **Fallback Chains** - Automatic provider failover via `@EnricherFallback`
-- ✅ **Per-Provider Resilience** - Independent resilience patterns per provider
-- ✅ **Cost Tracking** - Per-provider call counting and cost reports
-- ✅ **Preview/Dry-Run** - Preview enrichment routing without execution
-- ✅ **SSE Streaming** - Real-time batch enrichment via Server-Sent Events
-- ✅ **Data Quality** - Rule-based validation of enrichment output
-- ✅ **Data Lineage** - Provenance tracking for enrichment operations
-- ✅ **Data Transformation** - Post-enrichment field mapping and computed fields
+- **Observability** - Distributed tracing, metrics, logging
+- **Resiliency** - Circuit breaker, retry, rate limiting, timeout
+- **Event Publishing** - Enrichment lifecycle events
+- **Caching** - Configurable caching layer
+- **Multi-Tenancy** - Native support for multiple tenants
+- **Priority-Based Selection** - Control which provider is used
+- **Fallback Chains** - Automatic provider failover via `@EnricherFallback`
+- **Per-Provider Resilience** - Independent resilience patterns per provider
+- **Cost Tracking** - Per-provider call counting and cost reports
+- **Preview/Dry-Run** - Preview enrichment routing without execution
+- **SSE Streaming** - Real-time batch enrichment via Server-Sent Events
+- **Data Quality** - Rule-based validation of enrichment output
+- **Data Lineage** - Provenance tracking for enrichment operations
+- **Data Transformation** - Post-enrichment field mapping and computed fields
 
 ### What This Means
 You **only write business logic** (enrichers). The library handles:
-- ✅ REST API layer
-- ✅ Routing and discovery
-- ✅ Health checks
-- ✅ Observability
-- ✅ Resiliency
-- ✅ Caching
-- ✅ Fallback chains
-- ✅ Cost tracking
-- ✅ Quality validation
+- REST API layer
+- Routing and discovery
+- Health checks
+- Observability
+- Resiliency
+- Caching
+- Fallback chains
+- Cost tracking
+- Quality validation
 
 ---
 
-## 🎯 Key Principles
+## Key Principles
 
 ### 1. One Enricher = One Type
 
@@ -256,7 +256,7 @@ POST /api/v1/enrichment/smart
 
 ---
 
-## 🔗 Related Documentation
+## Related Documentation
 
 - **[Data Jobs — Complete Guide](../data-jobs/guide.md)** - For orchestrated workflows
 - **[Common Documentation](../common/README.md)** - Shared concepts, architecture, and utilities
@@ -268,7 +268,7 @@ POST /api/v1/enrichment/smart
 
 ---
 
-## 📋 Need Help?
+## Need Help?
 
 For questions, issues, or contributions, please refer to the main project documentation.
 

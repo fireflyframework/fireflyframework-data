@@ -105,16 +105,16 @@ Each trace includes:
 
 ### Real Trace ID and Span ID Extraction
 
-The library now includes **effective tracing context extraction** using the `TracingContextExtractor` utility:
+The library provides **tracing context extraction** using the `TracingContextExtractor` utility:
 
 #### Features
 
-- ✅ **Real Trace IDs** - Extracted from Micrometer Tracing (not generated timestamps)
-- ✅ **Real Span IDs** - Extracted from current observation span
-- ✅ **OpenTelemetry Support** - Full support for OpenTelemetry tracing backend
-- ✅ **Automatic Configuration** - Tracer is automatically injected via Spring Boot
-- ✅ **Multiple Extraction Strategies** - Tries tracer first, then observation context
-- ✅ **Distributed Tracing** - Full correlation with Jaeger, Grafana Tempo, and other OpenTelemetry-compatible systems
+- **Real Trace IDs** - Extracted from Micrometer Tracing (not generated timestamps)
+- **Real Span IDs** - Extracted from current observation span
+- **OpenTelemetry Support** - Full support for OpenTelemetry tracing backend
+- **Automatic Configuration** - Tracer is automatically injected via Spring Boot
+- **Multiple Extraction Strategies** - Tries tracer first, then observation context
+- **Distributed Tracing** - Full correlation with Jaeger, Grafana Tempo, and other OpenTelemetry-compatible systems
 
 #### How It Works
 
@@ -198,8 +198,8 @@ boolean hasContext = TracingContextExtractor.hasTracingContext(observation);
 
 | Backend | Status | Notes |
 |---------|--------|-------|
-| **OpenTelemetry** | ✅ Fully Supported | Default implementation, tested |
-| **Generic Micrometer** | ✅ Fallback | Uses generic `TraceContext` interface |
+| **OpenTelemetry** | Fully Supported | Default implementation, tested |
+| **Generic Micrometer** | Fallback | Uses generic `TraceContext` interface |
   - `orchestrator.type`: Type of orchestrator (AWS_STEP_FUNCTIONS, etc.)
 - **High Cardinality Tags**:
   - `execution.id.full`: Complete execution ID

@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fireflyframework.cache.core.CacheAdapter;
 import org.fireflyframework.data.config.DataEnrichmentProperties;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
@@ -189,7 +190,7 @@ public class OperationCacheService {
         String prefix = "operation:" + tenantId + ":";
         log.info("Evicting operation cache entries for tenant: {} (prefix: {})", tenantId, prefix);
 
-        return cacheAdapter.evictByPrefix(prefix)
+        return evictByPrefix(prefix)
             .doOnNext(count ->
                 log.info("Evicted {} operation cache entries for tenant: {}", count, tenantId))
             .then()
@@ -215,7 +216,7 @@ public class OperationCacheService {
         log.info("Evicting operation cache entries for provider: {} in tenant: {} (prefix: {})",
                 providerName, tenantId, prefix);
 
-        return cacheAdapter.evictByPrefix(prefix)
+        return evictByPrefix(prefix)
             .doOnNext(count ->
                 log.info("Evicted {} operation cache entries for provider: {} in tenant: {}",
                         count, providerName, tenantId))
@@ -243,7 +244,7 @@ public class OperationCacheService {
         log.info("Evicting cache entries for operation: tenant={}, provider={}, operation={} (prefix: {})",
                 tenantId, providerName, operationId, prefix);
 
-        return cacheAdapter.evictByPrefix(prefix)
+        return evictByPrefix(prefix)
             .doOnNext(count ->
                 log.info("Evicted {} cache entries for operation: tenant={}, provider={}, operation={}",
                         count, tenantId, providerName, operationId))
@@ -295,6 +296,22 @@ public class OperationCacheService {
             log.warn("Failed to hash request, using toString(): {}", e.getMessage());
             return String.valueOf(request.hashCode());
         }
+    }
+
+    private Mono<Long> evictByPrefix(String keyPrefix) {
+        return cacheAdapter.<String>keys()
+            .flatMap(allKeys -> {
+                var matching = allKeys.stream()
+                    .filter(k -> k.toString().startsWith(keyPrefix))
+                    .toList();
+                if (matching.isEmpty()) {
+                    return Mono.just(0L);
+                }
+                return Flux.fromIterable(matching)
+                    .flatMap(cacheAdapter::evict)
+                    .filter(Boolean::booleanValue)
+                    .count();
+            });
     }
 }
 

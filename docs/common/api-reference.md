@@ -1446,10 +1446,10 @@ Utility class for extracting trace IDs and span IDs from Micrometer Observation.
 **Package:** `org.fireflyframework.data.util`
 
 **Features:**
-- ✅ Real trace ID and span ID extraction from Micrometer Tracing
-- ✅ Support for OpenTelemetry backend
-- ✅ Multiple extraction strategies with fallbacks
-- ✅ Automatic configuration via Spring Boot
+- Real trace ID and span ID extraction from Micrometer Tracing
+- Support for OpenTelemetry backend
+- Multiple extraction strategies with fallbacks
+- Automatic configuration via Spring Boot
 
 #### Methods
 
@@ -1539,11 +1539,11 @@ Utility class for calculating data sizes by JSON serialization.
 **Package:** `org.fireflyframework.data.util`
 
 **Features:**
-- ✅ Precise byte size calculation via JSON serialization
-- ✅ UTF-8 encoding for accurate byte count
-- ✅ Support for complex objects and nested structures
-- ✅ Human-readable size formatting
-- ✅ Size validation utilities
+- Precise byte size calculation via JSON serialization
+- UTF-8 encoding for accurate byte count
+- Support for complex objects and nested structures
+- Human-readable size formatting
+- Size validation utilities
 
 #### Methods
 
