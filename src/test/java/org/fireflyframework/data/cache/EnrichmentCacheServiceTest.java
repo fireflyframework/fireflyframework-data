@@ -212,10 +212,10 @@ class EnrichmentCacheServiceTest {
     }
 
     @Test
-    void evictTenant_shouldClearCacheForTenant() {
+    void evictTenant_shouldEvictByPrefixForTenant() {
         // Given
         when(keyGenerator.generateTenantPattern("tenant-abc")).thenReturn("enrichment:tenant-abc:*");
-        when(cacheAdapter.clear()).thenReturn(Mono.empty());
+        when(cacheAdapter.evictByPrefix("enrichment:tenant-abc:")).thenReturn(Mono.just(3L));
 
         // When
         Mono<Void> result = cacheService.evictTenant("tenant-abc");
@@ -225,7 +225,92 @@ class EnrichmentCacheServiceTest {
                 .verifyComplete();
 
         verify(keyGenerator).generateTenantPattern("tenant-abc");
-        verify(cacheAdapter).clear();
+        verify(cacheAdapter).evictByPrefix("enrichment:tenant-abc:");
+        verify(cacheAdapter, never()).clear();
+    }
+
+    @Test
+    void evictProvider_shouldEvictByPrefixForProvider() {
+        // Given
+        when(keyGenerator.generateProviderPattern("tenant-abc", "TestProvider"))
+                .thenReturn("enrichment:tenant-abc:TestProvider:*");
+        when(cacheAdapter.evictByPrefix("enrichment:tenant-abc:TestProvider:")).thenReturn(Mono.just(2L));
+
+        // When
+        Mono<Void> result = cacheService.evictProvider("tenant-abc", "TestProvider");
+
+        // Then
+        StepVerifier.create(result)
+                .verifyComplete();
+
+        verify(keyGenerator).generateProviderPattern("tenant-abc", "TestProvider");
+        verify(cacheAdapter).evictByPrefix("enrichment:tenant-abc:TestProvider:");
+        verify(cacheAdapter, never()).clear();
+    }
+
+    @Test
+    void evictTenant_shouldHandleError() {
+        // Given
+        when(keyGenerator.generateTenantPattern("tenant-abc")).thenReturn("enrichment:tenant-abc:*");
+        when(cacheAdapter.evictByPrefix("enrichment:tenant-abc:"))
+                .thenReturn(Mono.error(new RuntimeException("Cache error")));
+
+        // When
+        Mono<Void> result = cacheService.evictTenant("tenant-abc");
+
+        // Then - Should complete without error (fail-safe)
+        StepVerifier.create(result)
+                .verifyComplete();
+    }
+
+    @Test
+    void evictProvider_shouldHandleError() {
+        // Given
+        when(keyGenerator.generateProviderPattern("tenant-abc", "TestProvider"))
+                .thenReturn("enrichment:tenant-abc:TestProvider:*");
+        when(cacheAdapter.evictByPrefix("enrichment:tenant-abc:TestProvider:"))
+                .thenReturn(Mono.error(new RuntimeException("Cache error")));
+
+        // When
+        Mono<Void> result = cacheService.evictProvider("tenant-abc", "TestProvider");
+
+        // Then - Should complete without error (fail-safe)
+        StepVerifier.create(result)
+                .verifyComplete();
+    }
+
+    @Test
+    void evictTenant_shouldReturnEmptyWhenCacheDisabled() {
+        // Given
+        properties.setCacheEnabled(false);
+        cacheService = new EnrichmentCacheService(cacheAdapter, keyGenerator, properties);
+
+        // When
+        Mono<Void> result = cacheService.evictTenant("tenant-abc");
+
+        // Then
+        StepVerifier.create(result)
+                .verifyComplete();
+
+        verify(cacheAdapter, never()).evictByPrefix(anyString());
+        verify(cacheAdapter, never()).clear();
+    }
+
+    @Test
+    void evictProvider_shouldReturnEmptyWhenCacheDisabled() {
+        // Given
+        properties.setCacheEnabled(false);
+        cacheService = new EnrichmentCacheService(cacheAdapter, keyGenerator, properties);
+
+        // When
+        Mono<Void> result = cacheService.evictProvider("tenant-abc", "TestProvider");
+
+        // Then
+        StepVerifier.create(result)
+                .verifyComplete();
+
+        verify(cacheAdapter, never()).evictByPrefix(anyString());
+        verify(cacheAdapter, never()).clear();
     }
 
     @Test

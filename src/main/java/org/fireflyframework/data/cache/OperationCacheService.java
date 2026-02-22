@@ -178,10 +178,6 @@ public class OperationCacheService {
     /**
      * Evicts all cache entries for a specific tenant.
      *
-     * <p>Note: Pattern-based eviction depends on cache implementation.
-     * For now, this clears the entire cache. In production with Redis,
-     * you'd want to implement pattern-based eviction.</p>
-     *
      * @param tenantId the tenant ID
      * @return a Mono that completes when eviction is done
      */
@@ -190,14 +186,13 @@ public class OperationCacheService {
             return Mono.empty();
         }
 
-        String pattern = "operation:" + tenantId + ":*";
-        log.info("Evicting all operation cache entries for tenant: {} (pattern: {})", tenantId, pattern);
+        String prefix = "operation:" + tenantId + ":";
+        log.info("Evicting operation cache entries for tenant: {} (prefix: {})", tenantId, prefix);
 
-        // Note: Pattern-based eviction depends on cache implementation
-        // For now, we'll clear the entire cache if tenant eviction is requested
-        return cacheAdapter.clear()
-            .doOnSuccess(v ->
-                log.info("Cleared operation cache for tenant: {}", tenantId))
+        return cacheAdapter.evictByPrefix(prefix)
+            .doOnNext(count ->
+                log.info("Evicted {} operation cache entries for tenant: {}", count, tenantId))
+            .then()
             .onErrorResume(error -> {
                 log.warn("Error evicting cache for tenant {}: {}", tenantId, error.getMessage());
                 return Mono.empty();
@@ -206,9 +201,6 @@ public class OperationCacheService {
 
     /**
      * Evicts all cache entries for a specific provider within a tenant.
-     *
-     * <p>Note: Pattern-based eviction depends on cache implementation.
-     * For now, this clears the entire cache.</p>
      *
      * @param tenantId the tenant ID
      * @param providerName the provider name
@@ -219,14 +211,15 @@ public class OperationCacheService {
             return Mono.empty();
         }
 
-        String pattern = "operation:" + tenantId + ":" + providerName + ":*";
-        log.info("Evicting all operation cache entries for provider: {} in tenant: {} (pattern: {})",
-                providerName, tenantId, pattern);
+        String prefix = "operation:" + tenantId + ":" + providerName + ":";
+        log.info("Evicting operation cache entries for provider: {} in tenant: {} (prefix: {})",
+                providerName, tenantId, prefix);
 
-        // Similar to evictTenant, this would ideally use pattern-based eviction
-        return cacheAdapter.clear()
-            .doOnSuccess(v ->
-                log.info("Cleared operation cache for provider: {} in tenant: {}", providerName, tenantId))
+        return cacheAdapter.evictByPrefix(prefix)
+            .doOnNext(count ->
+                log.info("Evicted {} operation cache entries for provider: {} in tenant: {}",
+                        count, providerName, tenantId))
+            .then()
             .onErrorResume(error -> {
                 log.warn("Error evicting cache for provider {}: {}", providerName, error.getMessage());
                 return Mono.empty();
@@ -235,9 +228,6 @@ public class OperationCacheService {
 
     /**
      * Evicts all cache entries for a specific operation within a tenant and provider.
-     *
-     * <p>Note: Pattern-based eviction depends on cache implementation.
-     * For now, this clears the entire cache.</p>
      *
      * @param tenantId the tenant ID
      * @param providerName the provider name
@@ -249,15 +239,15 @@ public class OperationCacheService {
             return Mono.empty();
         }
 
-        String pattern = "operation:" + tenantId + ":" + providerName + ":" + operationId + ":*";
-        log.info("Evicting all cache entries for operation: tenant={}, provider={}, operation={} (pattern: {})",
-                tenantId, providerName, operationId, pattern);
+        String prefix = "operation:" + tenantId + ":" + providerName + ":" + operationId + ":";
+        log.info("Evicting cache entries for operation: tenant={}, provider={}, operation={} (prefix: {})",
+                tenantId, providerName, operationId, prefix);
 
-        // Similar to evictTenant, this would ideally use pattern-based eviction
-        return cacheAdapter.clear()
-            .doOnSuccess(v ->
-                log.info("Cleared cache for operation: tenant={}, provider={}, operation={}",
-                        tenantId, providerName, operationId))
+        return cacheAdapter.evictByPrefix(prefix)
+            .doOnNext(count ->
+                log.info("Evicted {} cache entries for operation: tenant={}, provider={}, operation={}",
+                        count, tenantId, providerName, operationId))
+            .then()
             .onErrorResume(error -> {
                 log.warn("Error evicting cache for operation {}: {}", operationId, error.getMessage());
                 return Mono.empty();
